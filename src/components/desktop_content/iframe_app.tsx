@@ -1,5 +1,7 @@
 import { TApp } from '@/types';
+import { Box, Flex } from '@chakra-ui/react';
 import { useEffect, useRef, useState } from 'react';
+import styles from './index.module.scss';
 
 export default function IframApp({ appItem, isShow }: { appItem: TApp; isShow: boolean }) {
   const Iframe = useRef<HTMLIFrameElement>(null);
@@ -38,19 +40,20 @@ export default function IframApp({ appItem, isShow }: { appItem: TApp; isShow: b
   }, [appItem.data.url, isShow]);
 
   return (
-    <div className="h-full">
+    <Box h="100%">
       {loading && (
-        <div className="h-full grid content-center">
+        <Flex h="100%" justifyContent={'center'}>
+          loading
           {/* <Spinner label={'应用启动中... ' + loadingTime + ' 秒'} size={'large'} /> */}
-        </div>
+        </Flex>
       )}
+
       {!!url && (
         <iframe
+          className={styles.iframeContainer}
           ref={Iframe}
           src={url}
           allow="camera;microphone;clipboard-write;"
-          className="w-full h-full"
-          frameBorder={0}
           id={`app-window-${appItem.key}`} // key format sealos.image.hub
           onLoad={() => {
             clearInterval(loadingTimer.current);
@@ -59,6 +62,6 @@ export default function IframApp({ appItem, isShow }: { appItem: TApp; isShow: b
           }}
         />
       )}
-    </div>
+    </Box>
   );
 }

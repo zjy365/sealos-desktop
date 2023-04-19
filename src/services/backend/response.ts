@@ -47,7 +47,7 @@ const showStatus = (status: number) => {
 };
 
 export const jsonRes = (res: NextApiResponse, props: ApiResp) => {
-  const { code = 200, message = '', data = null, error } = props || {};
+  const { code = 200, message = '', data = null } = props || {};
   let msg = message;
 
   if (code < 200 || code >= 300) {
@@ -57,6 +57,6 @@ export const jsonRes = (res: NextApiResponse, props: ApiResp) => {
   res.json({
     code,
     message: msg,
-    data: data || error
+    data: data
   });
 };

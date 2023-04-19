@@ -2,12 +2,13 @@ import { Background } from '@/components/background';
 import DesktopContent from '@/components/desktop_content';
 import useAppStore from '@/stores/app';
 import useSessionStore from '@/stores/session';
+import { Box } from '@chakra-ui/react';
 import Head from 'next/head';
 import { useEffect } from 'react';
 import { createMasterAPP } from 'sealos-desktop-sdk/master';
 import styles from './index.module.scss';
 
-export default function Layout({ children }: any) {
+export default function Layout(props: any) {
   const { init } = useAppStore((state) => state);
   const session = useSessionStore((s) => s.session);
 
@@ -28,10 +29,10 @@ export default function Layout({ children }: any) {
         <title>sealos Cloud</title>
         <meta name="description" content="sealos cloud dashboard" />
       </Head>
-      <div className={styles.desktopContainer}>
+      <Box className={styles.desktopContainer}>
         <Background />
         <DesktopContent />
-      </div>
+      </Box>
     </>
   );
 }

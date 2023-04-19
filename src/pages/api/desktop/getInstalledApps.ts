@@ -4,13 +4,13 @@ import { authSession } from '@/services/backend/auth';
 import { GetUserDefaultNameSpace, K8sApi, ListCRD } from '../../../services/backend/kubernetes';
 import { jsonRes } from '@/services/backend/response';
 
-export default async function handler(req: NextApiRequest, resp: NextApiResponse) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     const kc = await authSession(req.headers);
 
     const kube_user = kc.getCurrentUser();
     if (kube_user === null) {
-      return jsonRes(resp, { code: 403, message: 'user is null' });
+      return jsonRes(res, { code: 403, message: 'user is null' });
     }
 
     const defaultMeta = {
@@ -44,8 +44,8 @@ export default async function handler(req: NextApiRequest, resp: NextApiResponse
     // if (process.env.NODE_ENV === 'development') {
     //   apps = apps.concat(MockInstalAPPs)
     // }
-    jsonRes(resp, { data: apps });
+    jsonRes(res, { data: apps });
   } catch (err) {
-    jsonRes(resp, { code: 500, error: err });
+    jsonRes(res, { code: 500, data: err });
   }
 }

@@ -1,14 +1,11 @@
-/* eslint-disable @next/next/no-img-element */
-import React, { useRef, useState } from 'react';
 import useAppStore from '@/stores/app';
 import { TApp } from '@/types';
 import clsx from 'clsx';
+import React, { useRef, useState } from 'react';
 import Draggable, { DraggableEventHandler } from 'react-draggable';
-// import HelpDocs from './help_docs';
-// import HelpDropDown from './help_dropdown';
-import styles from './index.module.scss';
-import tabStyles from './tab.module.scss';
 import Image from 'next/image';
+import styles from './index.module.scss';
+import { Box, Flex } from '@chakra-ui/react';
 
 export default function AppWindow(props: {
   style?: React.CSSProperties;
@@ -68,17 +65,18 @@ export default function AppWindow(props: {
       nodeRef={dragDom}
       position={position}
     >
-      <div
+      <Box
         ref={dragDom}
-        className={clsx(tabStyles.floatTab, 'lightWindow', dragging ? tabStyles.notrans : '')}
+        className={clsx(styles.floatTab, dragging ? styles.notrans : '')}
         data-size={wnapp.size}
         data-hide={!wnapp.isShow}
         id={wnapp.icon + 'App'}
         style={{
           zIndex: wnapp.zIndex
         }}
+        background={'#fff'}
       >
-        <div
+        <Box
           className={'windowHeader'}
           onDoubleClick={(e) => {
             e.stopPropagation();
@@ -91,30 +89,33 @@ export default function AppWindow(props: {
             setPosition({ x: 0, y: 0 });
           }}
         >
-          <div
+          <Flex
+            flexShrink={0}
+            h={'28px'}
+            justifyContent={'space-between'}
+            alignItems={'center'}
+            position={'relative'}
+            borderRadius={'6px 6px 0 0'}
+            background={'#F7F8FA'}
             className={styles.toolbar}
             onClick={(e) => {
               switchApp({ ...wnapp, mask: false }, 'clickMask');
             }}
-            style={{
-              background: '#fff'
-            }}
           >
-            <div className={clsx(styles.topInfo, 'flex flex-grow items-center ml-4')}>
+            {/* <div className={clsx(styles.topInfo, 'flex flex-grow items-center ml-4')}>
               <img src={wnapp.icon} alt={wnapp.name} width={14} />
               <div className={clsx('ml-2')} style={{ color: wnapp.menuData?.nameColor }}>
                 {wnapp.name}
               </div>
               {wnapp.menuData?.helpDropDown && <HelpDropDown />}
-              {/* @ts-ignore    */}
               {!!wnapp.menuData?.helpDocs && (
                 <HelpDocs
                   url={typeof wnapp.menuData?.helpDocs === 'string' ? wnapp.menuData?.helpDocs : ''}
                 />
               )}
-            </div>
+            </div> */}
 
-            <div className={clsx(styles.actbtns, 'flex items-center')}>
+            <Flex alignItems={'center'} className={clsx(styles.actbtns)}>
               <div
                 className={styles.uicon}
                 onClick={(e) => {
@@ -129,8 +130,8 @@ export default function AppWindow(props: {
                 <Image src={'/icons/minimize.png'} width={12} height={12} alt="minimize" />
               </div>
 
-              <div
-                className={clsx(styles.snapbox, 'h-full')}
+              <Box
+                h="100%"
                 onClick={(e) => {
                   e.stopPropagation();
                   e.preventDefault();
@@ -150,7 +151,7 @@ export default function AppWindow(props: {
                     alt="minimize"
                   />
                 </div>
-              </div>
+              </Box>
               <div
                 className={clsx(styles.uicon)}
                 data-type={'close'}
@@ -166,10 +167,21 @@ export default function AppWindow(props: {
               >
                 <Image src={'/icons/close.png'} width={12} height={12} alt="close" />
               </div>
-            </div>
-          </div>
-        </div>
-        <div className={clsx(tabStyles.windowScreen, 'flex flex-col')}>
+            </Flex>
+          </Flex>
+        </Box>
+        <Box flexGrow={1} overflow={'hidden'}>
+          {wnapp.mask && (
+            <div
+              className={styles.appMask}
+              onClick={() => {
+                switchApp({ ...wnapp, mask: false }, 'clickMask');
+              }}
+            ></div>
+          )}
+          {props.children}
+        </Box>
+        {/* <Flex position={'relative'} w={'100%'} borderRadius={'0 0 6px 6px'} overflow={'hidden'}>
           <div className="restWindow flex-grow flex flex-col relative">
             <div className="flex-grow overflow-hidden">
               {wnapp.mask && (
@@ -183,8 +195,8 @@ export default function AppWindow(props: {
               {props.children}
             </div>
           </div>
-        </div>
-      </div>
+        </Flex> */}
+      </Box>
     </Draggable>
   );
 }

@@ -21,7 +21,6 @@ const useAppStore = create<TOSState>()(
 
         init: async () => {
           const res = await request('/api/desktop/getInstalledApps');
-          console.log(res);
 
           set((state) => {
             /* equal order. just save first item */
