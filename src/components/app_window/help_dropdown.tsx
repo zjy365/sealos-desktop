@@ -1,6 +1,6 @@
 import { Menu, MenuItem, MenuList, MenuPopover, MenuTrigger } from '@fluentui/react-components';
 import React from 'react';
-import useSessionStore from 'stores/session';
+import useSessionStore from '@/stores/session';
 
 export default function HelpDropDown() {
   const getKubeconfigToken = useSessionStore((s) => s.getKubeconfigToken);

@@ -1,3 +1,4 @@
+import Layout from '@/layout';
 import { theme } from '@/styles/chakraTheme';
 import '@/styles/globals.scss';
 import '@/utils/i18n';

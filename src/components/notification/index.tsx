@@ -1,10 +1,10 @@
 import { Box, Flex, Text } from '@chakra-ui/react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import clsx from 'clsx';
-import Iconfont from 'components/iconfont';
+import Iconfont from '@/components/iconfont';
 import { useEffect, useMemo, useState } from 'react';
-import request from 'services/request';
-import { formatTime } from 'utils/format';
+import request from '@/services/request';
+import { formatTime } from '@/utils/tools';
 import styles from './index.module.scss';
 
 type NotificationItem = {

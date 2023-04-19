@@ -55,8 +55,7 @@ request.interceptors.response.use(
       return Promise.reject(apiResp.code + ':' + apiResp.message);
     }
 
-    response.data = apiResp.data;
-    return response.data;
+    return data;
   },
   (error) => {
     if (axios.isCancel(error)) {

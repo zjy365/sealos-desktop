@@ -1,13 +1,14 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useRef, useState } from 'react';
-import Icon from 'components/icons';
+import useAppStore from '@/stores/app';
+import { TApp } from '@/types';
+import clsx from 'clsx';
+import Draggable, { DraggableEventHandler } from 'react-draggable';
+// import HelpDocs from './help_docs';
+// import HelpDropDown from './help_dropdown';
 import styles from './index.module.scss';
 import tabStyles from './tab.module.scss';
-import clsx from 'clsx';
-import useAppStore, { TApp } from 'stores/app';
-import Draggable, { DraggableEventHandler } from 'react-draggable';
-import HelpDropDown from './help_dropdown';
-import HelpDocs from './help_docs';
+import Image from 'next/image';
 
 export default function AppWindow(props: {
   style?: React.CSSProperties;
@@ -125,7 +126,7 @@ export default function AppWindow(props: {
                   });
                 }}
               >
-                <Icon click={props.app} payload="mnmz" src="minimize" width={12} />
+                <Image src={'/icons/minimize.png'} width={12} height={12} alt="minimize" />
               </div>
 
               <div
@@ -142,11 +143,11 @@ export default function AppWindow(props: {
                 }}
               >
                 <div className={styles.uicon}>
-                  <Icon
-                    click={props.app}
+                  <Image
+                    src={wnapp.size === 'maximize' ? '/icons/maximize.png' : '/icons/maxmin.png'}
                     width={12}
-                    payload="mxmz"
-                    src={wnapp.size === 'maximize' ? 'maximize' : 'maxmin'}
+                    height={12}
+                    alt="minimize"
                   />
                 </div>
               </div>
@@ -163,7 +164,7 @@ export default function AppWindow(props: {
                   closeApp(wnapp.name);
                 }}
               >
-                <Icon className={styles.closeBtn} src="close" width={14} />
+                <Image src={'/icons/close.png'} width={12} height={12} alt="close" />
               </div>
             </div>
           </div>

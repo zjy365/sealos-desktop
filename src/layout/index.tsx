@@ -14,7 +14,7 @@ export default function Layout({ children }: any) {
   useEffect(() => {
     (async () => {
       // Initialize, get user information, install application information, etc.
-      await init(session?.kubeconfig);
+      await init();
     })();
   }, [init]);
 
@@ -30,7 +30,7 @@ export default function Layout({ children }: any) {
       </Head>
       <div className={styles.desktopContainer}>
         <Background />
-        {/* <DesktopContent /> */}
+        <DesktopContent />
       </div>
     </>
   );

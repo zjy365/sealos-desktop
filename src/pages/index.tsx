@@ -7,7 +7,6 @@ const destination = process.env.NEXT_PUBLIC_SERVICE + 'auth/login';
 
 export default function Home(props: any) {
   const router = useRouter();
-
   const isUserLogin = useSessionStore((s) => s.isUserLogin);
 
   useEffect(() => {

@@ -75,7 +75,7 @@ export type TOSState = {
   currentApp?: TApp;
 
   // init desktop
-  init(kubeconfig: string): void;
+  init(): void;
 
   // get all apps of the app store
   getAllApps(): void;
