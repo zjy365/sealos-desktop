@@ -30,7 +30,7 @@ export default function Layout({ children }: any) {
       </Head>
       <div className={styles.desktopContainer}>
         <Background />
-        <DesktopContent />
+        {/* <DesktopContent /> */}
       </div>
     </>
   );

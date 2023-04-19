@@ -1,5 +1,5 @@
 export type ApiResp = {
-  code: number;
+  code?: number;
   message?: string;
   data?: any;
   error?: any;

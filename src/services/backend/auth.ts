@@ -1,5 +1,5 @@
 import { IncomingHttpHeaders } from 'http';
-import { K8sApi } from '@/service/backend/kubernetes';
+import { K8sApi } from '@/services/backend/kubernetes';
 
 export const authSession = async (header: IncomingHttpHeaders) => {
   try {
