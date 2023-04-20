@@ -42,9 +42,8 @@ export default function IframApp({ appItem, isShow }: { appItem: TApp; isShow: b
   return (
     <Box h="100%">
       {loading && (
-        <Flex h="100%" justifyContent={'center'}>
+        <Flex h="100%" justifyContent={'center'} alignItems={'cneter'}>
           loading
-          {/* <Spinner label={'应用启动中... ' + loadingTime + ' 秒'} size={'large'} /> */}
         </Flex>
       )}
 

@@ -30,7 +30,7 @@ export default function TimeComponent(props: any) {
       // @ts-ignore
       return WeekDay[temp];
     } catch (error) {}
-  }, []);
+  }, [time]);
 
   return (
     <Flex

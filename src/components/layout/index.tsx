@@ -6,6 +6,7 @@ import Head from 'next/head';
 import { useEffect } from 'react';
 import { createMasterAPP } from 'sealos-desktop-sdk/master';
 import styles from './index.module.scss';
+import FloatButton from '@/components/floating_button';
 
 export default function Layout(props: any) {
   const { init } = useAppStore((state) => state);
@@ -31,6 +32,7 @@ export default function Layout(props: any) {
       <div className={styles.desktopContainer}>
         <Background />
         <DesktopContent />
+        <FloatButton />
       </div>
     </>
   );

@@ -9,6 +9,7 @@ import styles from './index.module.scss';
 import Image from 'next/image';
 import { MouseEvent, MouseEventHandler } from 'react';
 import dynamic from 'next/dynamic';
+import IframeWindow from './iframe_window';
 
 const TimeComponent = dynamic(() => import('./time'), {
   ssr: false
@@ -28,6 +29,7 @@ export default function DesktopContent(props: any) {
     () => (isBrowser ? document.getElementById('desktop') : null),
     [isBrowser]
   );
+
   const desktopWidth = DesktopDom?.offsetWidth || 0;
   const desktopHeight = DesktopDom?.offsetHeight || 0;
 
@@ -37,7 +39,7 @@ export default function DesktopContent(props: any) {
         return null;
 
       case APPTYPE.IFRAME:
-        return <IframeApp appItem={appItem} isShow={appItem.size !== 'minimize'} />;
+        return <IframeWindow appItem={appItem} isShow={appItem.size !== 'minimize'} />;
 
       default:
         break;
@@ -52,7 +54,7 @@ export default function DesktopContent(props: any) {
   };
 
   return (
-    <Box id="desktop" className={styles.desktop}>
+    <div id="desktop" className={styles.desktop}>
       <Flex w="100%" h="100%" alignItems={'center'} flexDirection={'column'}>
         <Box mt="140px" minW={'508px'}>
           <TimeComponent />
@@ -60,6 +62,7 @@ export default function DesktopContent(props: any) {
         <Grid
           mt="50px"
           minW={'508px'}
+          maxH={'300px'}
           templateRows={'repeat(2, 100px)'}
           templateColumns={'repeat(5, 72px)'}
           gap={'36px'}
@@ -92,7 +95,7 @@ export default function DesktopContent(props: any) {
         </Grid>
       </Flex>
 
-      {/* 打开的应用窗口 */}
+      {/* opened apps */}
       {openedApps.map((appItem) => {
         return (
           <AppWindow
@@ -106,6 +109,6 @@ export default function DesktopContent(props: any) {
           </AppWindow>
         );
       })}
-    </Box>
+    </div>
   );
 }

@@ -1,4 +1,4 @@
-import Layout from '@/layout';
+import Layout from '@/components/layout';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import useSessionStore from '@/stores/session';
