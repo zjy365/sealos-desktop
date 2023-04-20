@@ -1,6 +1,6 @@
 import { formatTime } from '@/utils/tools';
 import { Flex, Text } from '@chakra-ui/react';
-import { useEffect, useLayoutEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 const WeekDay = {
   Sunday: '周日',

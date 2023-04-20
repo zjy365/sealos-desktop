@@ -6,9 +6,13 @@ import { Flex, Box, Grid, GridItem, Text } from '@chakra-ui/react';
 import { useMemo } from 'react';
 import IframeApp from './iframe_app';
 import styles from './index.module.scss';
-import TimeComponent from './time';
 import Image from 'next/image';
 import { MouseEvent, MouseEventHandler } from 'react';
+import dynamic from 'next/dynamic';
+
+const TimeComponent = dynamic(() => import('./time'), {
+  ssr: false
+});
 
 export default function DesktopContent(props: any) {
   const {
