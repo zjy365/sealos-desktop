@@ -1,16 +1,19 @@
 /* eslint-disable @next/next/no-img-element */
-import Draggable from 'react-draggable';
-import styles from './index.module.scss';
-import { Box, Flex, useDisclosure } from '@chakra-ui/react';
-import clsx from 'clsx';
 import useAppStore from '@/stores/app';
 import { TApp } from '@/types';
-import { useMemo } from 'react';
+import { Box, Flex, useDisclosure } from '@chakra-ui/react';
+import clsx from 'clsx';
+import { MouseEvent, useMemo, useState } from 'react';
+import Draggable from 'react-draggable';
+import styles from './index.module.scss';
 
 export default function Index(props: any) {
   const { installedApps: apps } = useAppStore((state) => state);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  // const apps = [1, 2, 3, 4, 5, 6];
+  const [dragging, setDragging] = useState(false);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [startPosition, setStartPosition] = useState({ x: 0, y: 0 });
+  const [endPosition, setEndPosition] = useState({ x: 0, y: 0 });
 
   const [degree, contentSkewDegree, contentRotateDegree] = useMemo(() => {
     const temp = 360 / apps.length;
@@ -21,30 +24,105 @@ export default function Index(props: any) {
 
   if (apps?.length === 0) return null;
 
+  const handleCenterButton = (event: MouseEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    const d = Math.sqrt(
+      (startPosition.x - endPosition.x) * (startPosition.x - endPosition.x) +
+        (startPosition.y - endPosition.y) * (startPosition.y - endPosition.y)
+    );
+    if (d <= 5) {
+      return isOpen ? onClose() : onOpen();
+    }
+  };
+
+  const handleMouseDown = (event: MouseEvent<HTMLDivElement>) => {
+    console.log(event);
+
+    // setDragging(false);
+    // const startX = event.clientX;
+    // const startY = event.clientY;
+    // const onMouseMove = (event: MouseEvent<HTMLDivElement>) => {
+    //   if (
+    //     !dragging &&
+    //     (Math.abs(event.clientX - startX) > 5 || Math.abs(event.clientY - startY) > 5)
+    //   ) {
+    //     setDragging(true);
+    //   }
+    // };
+    // const onMouseUp = () => {
+    //   document.removeEventListener('mousemove', onMouseMove);
+    //   document.removeEventListener('mouseup', onMouseUp);
+    //   if (!dragging) {
+    //     event.preventDefault();
+    //     event.stopPropagation();
+    //   }
+    // };
+    // document.addEventListener('mousemove', onMouseMove);
+    // document.addEventListener('mouseup', onMouseUp);
+  };
+
+  // const handleDragBoundary: DraggableEventHandler = (e, position) => {
+  //   const { x, y } = position;
+  //   const appHeaderHeight = dragDom.current?.querySelector('.windowHeader')?.clientHeight || 30;
+  //   const appHeaderWidth = dragDom.current?.querySelector('.windowHeader')?.clientWidth || 3000;
+
+  //   if (currentApp?.size === 'maxmin') {
+  //     let upperBoundary = -desktopHeight * 0.1;
+  //     let lowerBoundary = desktopHeight * 0.9 - appHeaderHeight;
+  //     setPosition({
+  //       x:
+  //         x < 0
+  //           ? x < -1.1 * appHeaderWidth // (0.8width + width/0.6*0.2)
+  //             ? 0
+  //             : x
+  //           : x > 1.1 * appHeaderWidth
+  //           ? 0
+  //           : x,
+  //       y: y < upperBoundary ? upperBoundary : y > lowerBoundary ? 0 : y
+  //     });
+  //   } else {
+  //     setPosition({
+  //       x: x < 0 ? (x < -0.8 * appHeaderWidth ? 0 : x) : x > 0.8 * appHeaderWidth ? 0 : x,
+  //       y: y < 0 ? 0 : y > desktopHeight - appHeaderHeight ? 0 : y
+  //     });
+  //   }
+  // };
+
   return (
     <Draggable
-    // onStart={() => {
-    //   setDragging(true);
-    // }}
-    // onDrag={(e, position) => {
-    //   setPosition(position);
-    // }}
-    // onStop={(e, position) => {
-    //   handleDragBoundary(e, position);
-    // setDragging(false);
-    // }}
-    // handle=".windowHeader"
-    // nodeRef={dragDom}
-    // position={position}
+      onStart={(e, position) => {
+        setDragging(true);
+        setStartPosition(position);
+      }}
+      onDrag={(e, position) => {
+        setPosition(position);
+      }}
+      onStop={(e, position) => {
+        // handleDragBoundary(e, position);
+        setDragging(false);
+        setEndPosition(position);
+      }}
+      handle="#centerButton"
+      // nodeRef={dragDom}
+      // position={position}
     >
       <div className={styles.container}>
         <div className={styles.floatBtn}>
           <div className={styles.innerBtn}>
-            <div className={styles.centerBtn} onClick={isOpen ? onClose : onOpen}></div>
+            <div
+              id="centerButton"
+              className={styles.centerBtn}
+              onClick={handleCenterButton}
+              // onMouseDown={handleMouseDown}
+            ></div>
           </div>
         </div>
 
-        <Box className={clsx(styles.cricleNav, isOpen && styles.openedNav)}>
+        <Box
+          className={clsx(styles.cricleNav, isOpen && styles.openedNav)}
+          data-open={isOpen}
+          userSelect={'none'}
+        >
           {apps?.map((item: TApp, index: number) => {
             return (
               <Box

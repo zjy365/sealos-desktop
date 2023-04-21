@@ -7,6 +7,7 @@ specifiers:
   '@kubernetes/client-node': ^0.18.1
   '@tanstack/react-query': ^4.29.3
   '@types/js-yaml': ^4.0.5
+  '@types/lodash': ^4.14.194
   '@types/node': 18.15.11
   '@types/nprogress': ^0.2.0
   '@types/react': 18.0.37
@@ -65,6 +66,7 @@ dependencies:
 
 devDependencies:
   '@types/js-yaml': registry.npmmirror.com/@types/js-yaml/4.0.5
+  '@types/lodash': registry.npmmirror.com/@types/lodash/4.14.194
   '@types/node': registry.npmmirror.com/@types/node/18.15.11
   '@types/nprogress': registry.npmmirror.com/@types/nprogress/0.2.0
   '@types/react': registry.npmmirror.com/@types/react/18.0.37
@@ -1936,7 +1938,6 @@ packages:
     resolution: {integrity: sha512-r22s9tAS7imvBt2lyHC9B8AGwWnXaYb1tY09oyLkXDs4vArpYJzw09nj8MLx5VfciBPGIb+ZwG0ssYnEPJxn/g==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@types/lodash/-/lodash-4.14.194.tgz}
     name: '@types/lodash'
     version: 4.14.194
-    dev: false
 
   registry.npmmirror.com/@types/node/18.15.11:
     resolution: {integrity: sha512-E5Kwq2n4SbMzQOn6wnmBjuK9ouqlURrcZDVfbo9ftDDTFt3nk7ZKK4GMOzoYgnpQJKcxwQw+lGaBvvlMo0qN/Q==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@types/node/-/node-18.15.11.tgz}
