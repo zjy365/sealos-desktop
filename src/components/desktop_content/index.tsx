@@ -59,6 +59,7 @@ export default function DesktopContent(props: any) {
         <Box mt="140px" minW={'508px'}>
           <TimeComponent />
         </Box>
+        {/* desktop apps */}
         <Grid
           mt="50px"
           minW={'508px'}

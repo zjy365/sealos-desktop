@@ -35,32 +35,6 @@ export default function Index(props: any) {
     }
   };
 
-  const handleMouseDown = (event: MouseEvent<HTMLDivElement>) => {
-    console.log(event);
-
-    // setDragging(false);
-    // const startX = event.clientX;
-    // const startY = event.clientY;
-    // const onMouseMove = (event: MouseEvent<HTMLDivElement>) => {
-    //   if (
-    //     !dragging &&
-    //     (Math.abs(event.clientX - startX) > 5 || Math.abs(event.clientY - startY) > 5)
-    //   ) {
-    //     setDragging(true);
-    //   }
-    // };
-    // const onMouseUp = () => {
-    //   document.removeEventListener('mousemove', onMouseMove);
-    //   document.removeEventListener('mouseup', onMouseUp);
-    //   if (!dragging) {
-    //     event.preventDefault();
-    //     event.stopPropagation();
-    //   }
-    // };
-    // document.addEventListener('mousemove', onMouseMove);
-    // document.addEventListener('mouseup', onMouseUp);
-  };
-
   // const handleDragBoundary: DraggableEventHandler = (e, position) => {
   //   const { x, y } = position;
   //   const appHeaderHeight = dragDom.current?.querySelector('.windowHeader')?.clientHeight || 30;
@@ -109,12 +83,7 @@ export default function Index(props: any) {
       <div className={styles.container}>
         <div className={styles.floatBtn}>
           <div className={styles.innerBtn}>
-            <div
-              id="centerButton"
-              className={styles.centerBtn}
-              onClick={handleCenterButton}
-              // onMouseDown={handleMouseDown}
-            ></div>
+            <div id="centerButton" className={styles.centerBtn} onClick={handleCenterButton}></div>
           </div>
         </div>
 

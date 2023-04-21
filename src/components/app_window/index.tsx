@@ -2,12 +2,11 @@
 /* eslint-disable @next/next/no-img-element */
 import useAppStore from '@/stores/app';
 import { TApp } from '@/types';
+import { Box, Flex } from '@chakra-ui/react';
 import clsx from 'clsx';
 import React, { useRef, useState } from 'react';
 import Draggable, { DraggableEventHandler } from 'react-draggable';
-import Image from 'next/image';
 import styles from './index.module.scss';
-import { Box, Flex } from '@chakra-ui/react';
 
 export default function AppWindow(props: {
   style?: React.CSSProperties;
@@ -75,10 +74,12 @@ export default function AppWindow(props: {
           zIndex: wnapp?.zIndex
         }}
       >
+        {/* app window header */}
         <Flex
           h="32px"
           background={'#F7F8FA'}
           className={'windowHeader'}
+          borderRadius={'6px 6px 0 0'}
           onDoubleClick={(e) => {
             e.stopPropagation();
             e.preventDefault();
@@ -92,7 +93,7 @@ export default function AppWindow(props: {
         >
           <Flex ml="16px" alignItems={'center'}>
             <img src={wnapp?.icon} alt={wnapp?.name} width={14} />
-            <Box ml="8px" color={wnapp?.menuData?.nameColor}>
+            <Box ml="8px" color={wnapp?.menuData?.nameColor} fontSize={'12px'} fontWeight={400}>
               {wnapp?.name}
             </Box>
           </Flex>
@@ -145,6 +146,7 @@ export default function AppWindow(props: {
             </div>
           </Flex>
         </Flex>
+        {/* app window content */}
         <Flex flexGrow={1} overflow={'hidden'} borderRadius={'0 0 6px 6px'}>
           {wnapp.mask && (
             <div
