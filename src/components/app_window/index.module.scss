@@ -1,39 +1,3 @@
-.toolbar {
-  display: flex;
-  flex-shrink: 0;
-  width: 100%;
-  height: 28px;
-  justify-content: space-between;
-  align-items: center;
-  position: relative;
-  border-radius: 6px 6px 0 0;
-}
-
-.actbtns {
-  height: 100%;
-  z-index: 99;
-  position: absolute;
-  right: 0;
-
-  .uicon {
-    height: 100%;
-    padding: 0 18px;
-    transition: all ease-in-out 60ms;
-
-    img {
-      transition: all ease-in-out 60ms;
-    }
-
-    &:hover {
-      background: rgba(136, 136, 136, 0.2);
-    }
-
-    &[data-type='close']:hover {
-      background: rgba(255, 0, 0, 0.8);
-    }
-  }
-}
-
 .appMask {
   position: absolute;
   width: 100%;
@@ -41,7 +5,7 @@
   z-index: 4;
 }
 
-.floatTab {
+.windowContainer {
   position: absolute;
   top: 0;
   left: 0;
@@ -52,6 +16,7 @@
   // transform-origin: center;
   display: flex;
   flex-direction: column;
+  background: #f7f8fa;
 
   &[data-size='maximize'] {
     .closeBtn,
@@ -91,6 +56,27 @@
   }
 }
 
-.notrans {
-  transition: none !important;
+.uicon {
+  height: 100%;
+  padding: 8px 18px;
+  transition: all ease-in-out 60ms;
+
+  img {
+    transition: all ease-in-out 60ms;
+  }
+
+  &:hover {
+    background: rgba(136, 136, 136, 0.2);
+  }
+
+  &[data-type='close']:hover {
+    background: rgba(255, 0, 0, 0.8);
+  }
+}
+
+.windowScreen {
+  width: 100%;
+  flex-grow: 1;
+  overflow: hidden;
+  border-radius: 0 0 6px 6px;
 }

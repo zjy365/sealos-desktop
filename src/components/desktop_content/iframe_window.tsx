@@ -1,5 +1,4 @@
 import { TApp } from '@/types';
-import { Box } from '@chakra-ui/react';
 import { useMemo } from 'react';
 import styles from './index.module.scss';
 
@@ -7,7 +6,7 @@ export default function Iframe_window({ appItem, isShow }: { appItem: TApp; isSh
   const url = useMemo(() => appItem?.data?.url || '', [appItem?.data?.url]);
 
   return (
-    <Box h="100%">
+    <div className={styles.iframeContainer}>
       {!!url && (
         <iframe
           className={styles.iframeContainer}
@@ -16,6 +15,6 @@ export default function Iframe_window({ appItem, isShow }: { appItem: TApp; isSh
           id={`app-window-${appItem.key}`}
         />
       )}
-    </Box>
+    </div>
   );
 }
