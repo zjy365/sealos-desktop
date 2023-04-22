@@ -8,7 +8,7 @@ import Draggable from 'react-draggable';
 import styles from './index.module.scss';
 
 export default function Index(props: any) {
-  const { installedApps: apps } = useAppStore((state) => state);
+  const { installedApps: apps, openApp } = useAppStore((state) => state);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [dragging, setDragging] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });
@@ -16,7 +16,8 @@ export default function Index(props: any) {
   const [endPosition, setEndPosition] = useState({ x: 0, y: 0 });
 
   const [degree, contentSkewDegree, contentRotateDegree] = useMemo(() => {
-    const temp = 360 / apps.length;
+    const len = apps?.length < 6 ? 6 : apps?.length;
+    const temp = 360 / len;
     const skewDegree = -(90 - temp);
     const rotateDegree = -(90 - temp / 2);
     return [temp, skewDegree, rotateDegree];
@@ -33,6 +34,11 @@ export default function Index(props: any) {
     if (d <= 5) {
       return isOpen ? onClose() : onOpen();
     }
+  };
+
+  const calculateDegree = (index: number) => {
+    const temp = -(degree * index + contentRotateDegree);
+    return `rotate(${temp}deg)`;
   };
 
   // const handleDragBoundary: DraggableEventHandler = (e, position) => {
@@ -80,7 +86,7 @@ export default function Index(props: any) {
       // nodeRef={dragDom}
       // position={position}
     >
-      <div className={styles.container}>
+      <div className={styles.container} data-isopen={isOpen}>
         <div className={styles.floatBtn}>
           <div className={styles.innerBtn}>
             <div id="centerButton" className={styles.centerBtn} onClick={handleCenterButton}></div>
@@ -108,8 +114,9 @@ export default function Index(props: any) {
               >
                 <Flex
                   justifyContent={'center'}
-                  mt="8px"
+                  pt="8px"
                   className={styles.subItem}
+                  // The icon is perpendicular to the center of the circle
                   transform={`skew(${contentSkewDegree}deg) rotate(${contentRotateDegree}deg)`}
                 >
                   <Flex
@@ -118,6 +125,9 @@ export default function Index(props: any) {
                     backgroundColor={'rgba(244, 246, 248, 0.9)'}
                     borderRadius={'50%'}
                     p={'4px'}
+                    // The icon is perpendicular to the x-axis of the page
+                    transform={calculateDegree(index + 1)}
+                    onClick={() => openApp(item)}
                   >
                     <img src={item?.icon} alt={item?.name} />
                   </Flex>

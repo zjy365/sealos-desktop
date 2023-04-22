@@ -1,10 +1,11 @@
 .container {
   position: absolute;
-  bottom: 0;
-  right: 0;
+  bottom: 120px;
+  right: 120px;
   z-index: 9999;
-  width: 200px;
-  height: 200px;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
 }
 
 .floatBtn {
@@ -48,6 +49,8 @@
   z-index: 9997;
   width: 200px;
   height: 200px;
+  left: -68px;
+  top: -68px;
   border-radius: 50%;
   opacity: 0;
   transition: all 0.3s ease 0.3s;
