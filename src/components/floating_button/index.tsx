@@ -3,9 +3,15 @@ import useAppStore from '@/stores/app';
 import { TApp } from '@/types';
 import { Box, Flex, useDisclosure } from '@chakra-ui/react';
 import clsx from 'clsx';
-import { MouseEvent, useMemo, useState } from 'react';
+import { MouseEvent, useEffect, useMemo, useState } from 'react';
 import Draggable, { DraggableEventHandler } from 'react-draggable';
 import styles from './index.module.scss';
+import Iconfont from '../iconfont';
+enum Suction {
+  None,
+  Left,
+  Right
+}
 
 export default function Index(props: any) {
   const { installedApps: apps, openApp } = useAppStore((state) => state);
@@ -14,7 +20,8 @@ export default function Index(props: any) {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [startPosition, setStartPosition] = useState({ x: 0, y: 0 });
   const [endPosition, setEndPosition] = useState({ x: 0, y: 0 });
-  const [suction, isSuction] = useState(false);
+  const [suction, setSuction] = useState(Suction.None);
+  const [lockSuction, setLockSuction] = useState(true);
 
   const [degree, contentSkewDegree, contentRotateDegree] = useMemo(() => {
     const len = apps?.length < 6 ? 6 : apps?.length;
@@ -24,11 +31,11 @@ export default function Index(props: any) {
     return [temp, skewDegree, rotateDegree];
   }, [apps.length]);
 
-  const [floatCricleNavHeight, floatCricleNavWidth] = useMemo(() => {
-    const w = document?.getElementById('floatCricleNav')?.clientHeight || 64;
-    const h = document?.getElementById('floatCricleNav')?.clientHeight || 64;
-    return [w, h];
-  }, []);
+  // useEffect(() => {
+  //   window.addEventListener('resize', function () {
+  //     console.log(1);
+  //   });
+  // }, []);
 
   if (apps?.length === 0) return null;
 
@@ -53,22 +60,40 @@ export default function Index(props: any) {
   // drag boundary calculation
   const handleDragBoundary: DraggableEventHandler = (e, position) => {
     try {
+      setLockSuction(true);
       const { x, y } = position;
       const browserWidth = window.innerWidth;
       const browserHeight = window.innerHeight;
-      console.log(position, floatCricleNavHeight, floatCricleNavWidth);
+      const floatButtonNavWidth = document?.getElementById('floatButtonNav')?.clientHeight || 64;
+      const floatButtonNavHeight = document?.getElementById('floatButtonNav')?.clientHeight || 64;
+      console.log(position, floatButtonNavHeight, floatButtonNavWidth);
 
-      // 120 is absolute positioning
-      const leftBoundary = -browserWidth + floatCricleNavWidth + 120;
-      const rightBoundary = 120;
-      const topBoundary = -browserHeight + floatCricleNavHeight + 120;
+      // 120 is absolute positioning; 10 Boundary distance;
+      const leftBoundary = -browserWidth + floatButtonNavWidth + 120 + 10;
+      const rightBoundary = 120 - 10;
+      const topBoundary = -browserHeight + floatButtonNavHeight + 120;
       const bottomBoundary = 120;
 
       setPosition({
         x: x < leftBoundary ? leftBoundary : x > rightBoundary ? rightBoundary : x,
         y: y < topBoundary ? topBoundary : y > bottomBoundary ? bottomBoundary : y
       });
-    } catch (error) {}
+
+      // Button Suction State
+      if (x < leftBoundary) {
+        setSuction(Suction.Left);
+        setTimeout(() => {
+          setLockSuction(false);
+        }, 1000);
+      } else if (x > rightBoundary) {
+        setSuction(Suction.Right);
+        setTimeout(() => {
+          setLockSuction(false);
+        }, 1000);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -89,8 +114,11 @@ export default function Index(props: any) {
       // nodeRef={dragDom}
       position={position}
     >
-      <div id="floatCricleNav" className={styles.container} data-isopen={isOpen}>
-        <div className={styles.floatBtn}>
+      <div id="floatButtonNav" className={styles.container} data-isopen={isOpen}>
+        <div
+          className={styles.floatBtn}
+          style={{ display: suction === Suction.None ? 'block' : 'none' }}
+        >
           <div className={styles.innerBtn}>
             <div id="centerButton" className={styles.centerBtn} onClick={handleCenterButton}></div>
           </div>
@@ -101,10 +129,12 @@ export default function Index(props: any) {
           className={clsx(styles.cricleNav, isOpen && styles.openedNav)}
           data-open={isOpen}
           userSelect={'none'}
+          style={{ display: suction === Suction.None ? 'block' : 'none' }}
         >
           {apps?.map((item: TApp, index: number) => {
             return (
               <Box
+                cursor={'pointer'}
                 className={styles.navItem}
                 color={'white'}
                 key={item?.name}
@@ -131,7 +161,6 @@ export default function Index(props: any) {
                     p={'4px'}
                     // The icon is perpendicular to the x-axis of the page
                     transform={calculateDegree(index + 1)}
-                    onClick={() => openApp(item)}
                   >
                     <img src={item?.icon} alt={item?.name} />
                   </Flex>
@@ -141,6 +170,30 @@ export default function Index(props: any) {
           })}
         </Box>
         {/* Button Suction State */}
+        <Flex
+          alignItems={'center'}
+          justifyContent={suction === Suction.Left ? 'end' : 'start'}
+          userSelect={'none'}
+          className={styles.suctionState}
+          data-suction={suction}
+          onClick={() => {
+            onClose();
+            setSuction(Suction.None);
+          }}
+          onMouseEnter={() => {
+            console.log(suction);
+            if (!lockSuction) {
+              setSuction(Suction.None);
+            }
+          }}
+        >
+          <Iconfont
+            iconName={suction === Suction.Left ? 'icon-more-left' : 'icon-more-right'}
+            color="#FFFFFF"
+            width={24}
+            height={24}
+          />
+        </Flex>
       </div>
     </Draggable>
   );

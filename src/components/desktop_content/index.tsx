@@ -70,14 +70,15 @@ export default function DesktopContent(props: any) {
         >
           {apps &&
             apps.map((item: TApp, index) => (
-              <GridItem w="72px" h="100px" key={index} userSelect="none">
+              <GridItem w="72px" h="100px" key={index} userSelect="none" cursor={'pointer'}>
                 <Box
                   w="72px"
                   h="72px"
                   p={'15px'}
                   borderRadius={8}
                   backgroundColor={'rgba(244, 246, 248, 0.9)'}
-                  onDoubleClick={(e) => handleDoubleClick(e, item)}
+                  onClick={(e) => handleDoubleClick(e, item)}
+                  // onDoubleClick={(e) => handleDoubleClick(e, item)}
                 >
                   <img width={'100%'} height={'100%'} alt="app" src={item?.icon}></img>
                 </Box>

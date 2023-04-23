@@ -34,6 +34,7 @@ export default function TimeComponent(props: any) {
 
   return (
     <Flex
+      userSelect={'none'}
       alignItems={'center'}
       justifyContent={'center'}
       flexDirection={'column'}
