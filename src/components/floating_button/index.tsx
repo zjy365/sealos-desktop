@@ -4,7 +4,7 @@ import { TApp } from '@/types';
 import { Box, Flex, useDisclosure } from '@chakra-ui/react';
 import clsx from 'clsx';
 import { MouseEvent, useMemo, useState } from 'react';
-import Draggable from 'react-draggable';
+import Draggable, { DraggableEventHandler } from 'react-draggable';
 import styles from './index.module.scss';
 
 export default function Index(props: any) {
@@ -14,6 +14,7 @@ export default function Index(props: any) {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [startPosition, setStartPosition] = useState({ x: 0, y: 0 });
   const [endPosition, setEndPosition] = useState({ x: 0, y: 0 });
+  const [suction, isSuction] = useState(false);
 
   const [degree, contentSkewDegree, contentRotateDegree] = useMemo(() => {
     const len = apps?.length < 6 ? 6 : apps?.length;
@@ -23,8 +24,15 @@ export default function Index(props: any) {
     return [temp, skewDegree, rotateDegree];
   }, [apps.length]);
 
+  const [floatCricleNavHeight, floatCricleNavWidth] = useMemo(() => {
+    const w = document?.getElementById('floatCricleNav')?.clientHeight || 64;
+    const h = document?.getElementById('floatCricleNav')?.clientHeight || 64;
+    return [w, h];
+  }, []);
+
   if (apps?.length === 0) return null;
 
+  // Determine whether to drag or click
   const handleCenterButton = (event: MouseEvent<HTMLDivElement>) => {
     event.preventDefault();
     const d = Math.sqrt(
@@ -36,37 +44,32 @@ export default function Index(props: any) {
     }
   };
 
+  // Calculate the correct orientation of the icon
   const calculateDegree = (index: number) => {
     const temp = -(degree * index + contentRotateDegree);
     return `rotate(${temp}deg)`;
   };
 
-  // const handleDragBoundary: DraggableEventHandler = (e, position) => {
-  //   const { x, y } = position;
-  //   const appHeaderHeight = dragDom.current?.querySelector('.windowHeader')?.clientHeight || 30;
-  //   const appHeaderWidth = dragDom.current?.querySelector('.windowHeader')?.clientWidth || 3000;
+  // drag boundary calculation
+  const handleDragBoundary: DraggableEventHandler = (e, position) => {
+    try {
+      const { x, y } = position;
+      const browserWidth = window.innerWidth;
+      const browserHeight = window.innerHeight;
+      console.log(position, floatCricleNavHeight, floatCricleNavWidth);
 
-  //   if (currentApp?.size === 'maxmin') {
-  //     let upperBoundary = -desktopHeight * 0.1;
-  //     let lowerBoundary = desktopHeight * 0.9 - appHeaderHeight;
-  //     setPosition({
-  //       x:
-  //         x < 0
-  //           ? x < -1.1 * appHeaderWidth // (0.8width + width/0.6*0.2)
-  //             ? 0
-  //             : x
-  //           : x > 1.1 * appHeaderWidth
-  //           ? 0
-  //           : x,
-  //       y: y < upperBoundary ? upperBoundary : y > lowerBoundary ? 0 : y
-  //     });
-  //   } else {
-  //     setPosition({
-  //       x: x < 0 ? (x < -0.8 * appHeaderWidth ? 0 : x) : x > 0.8 * appHeaderWidth ? 0 : x,
-  //       y: y < 0 ? 0 : y > desktopHeight - appHeaderHeight ? 0 : y
-  //     });
-  //   }
-  // };
+      // 120 is absolute positioning
+      const leftBoundary = -browserWidth + floatCricleNavWidth + 120;
+      const rightBoundary = 120;
+      const topBoundary = -browserHeight + floatCricleNavHeight + 120;
+      const bottomBoundary = 120;
+
+      setPosition({
+        x: x < leftBoundary ? leftBoundary : x > rightBoundary ? rightBoundary : x,
+        y: y < topBoundary ? topBoundary : y > bottomBoundary ? bottomBoundary : y
+      });
+    } catch (error) {}
+  };
 
   return (
     <Draggable
@@ -78,21 +81,22 @@ export default function Index(props: any) {
         setPosition(position);
       }}
       onStop={(e, position) => {
-        // handleDragBoundary(e, position);
+        handleDragBoundary(e, position);
         setDragging(false);
         setEndPosition(position);
       }}
       handle="#centerButton"
       // nodeRef={dragDom}
-      // position={position}
+      position={position}
     >
-      <div className={styles.container} data-isopen={isOpen}>
+      <div id="floatCricleNav" className={styles.container} data-isopen={isOpen}>
         <div className={styles.floatBtn}>
           <div className={styles.innerBtn}>
             <div id="centerButton" className={styles.centerBtn} onClick={handleCenterButton}></div>
           </div>
         </div>
 
+        {/* menu */}
         <Box
           className={clsx(styles.cricleNav, isOpen && styles.openedNav)}
           data-open={isOpen}
@@ -136,6 +140,7 @@ export default function Index(props: any) {
             );
           })}
         </Box>
+        {/* Button Suction State */}
       </div>
     </Draggable>
   );

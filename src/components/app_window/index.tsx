@@ -21,6 +21,7 @@ export default function AppWindow(props: {
   );
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const dragDom = useRef<HTMLDivElement>(null);
+  const [dragging, setDragging] = useState(false);
 
   const handleDragBoundary: DraggableEventHandler = (e, position) => {
     const { x, y } = position;
@@ -52,21 +53,21 @@ export default function AppWindow(props: {
   return (
     <Draggable
       onStart={() => {
-        // setDragging(true);
+        setDragging(true);
       }}
       onDrag={(e, position) => {
         setPosition(position);
       }}
       onStop={(e, position) => {
         handleDragBoundary(e, position);
-        // setDragging(false);
+        setDragging(false);
       }}
       handle=".windowHeader"
       position={position}
     >
       <div
         ref={dragDom}
-        className={clsx(styles.windowContainer)}
+        className={clsx(styles.windowContainer, dragging ? styles.notrans : '')}
         data-size={wnapp?.size}
         data-hide={!wnapp?.isShow}
         id={wnapp?.icon + 'App'}
