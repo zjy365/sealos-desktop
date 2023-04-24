@@ -3,10 +3,11 @@ import useAppStore from '@/stores/app';
 import { TApp } from '@/types';
 import { Box, Flex, useDisclosure } from '@chakra-ui/react';
 import clsx from 'clsx';
-import { MouseEvent, useEffect, useMemo, useState } from 'react';
+import { MouseEvent, useMemo, useRef, useState } from 'react';
 import Draggable, { DraggableEventHandler } from 'react-draggable';
-import styles from './index.module.scss';
 import Iconfont from '../iconfont';
+import styles from './index.module.scss';
+
 enum Suction {
   None,
   Left = 'left',
@@ -22,20 +23,15 @@ export default function Index(props: any) {
   const [endPosition, setEndPosition] = useState({ x: 0, y: 0 });
   const [suction, setSuction] = useState(Suction.None);
   const [lockSuction, setLockSuction] = useState(true);
+  const timeoutRef = useRef(null);
 
   const [degree, contentSkewDegree, contentRotateDegree] = useMemo(() => {
     const len = apps?.length < 6 ? 6 : apps?.length;
-    const temp = 360 / len;
+    const temp: number = 360 / len;
     const skewDegree = -(90 - temp);
     const rotateDegree = -(90 - temp / 2);
     return [temp, skewDegree, rotateDegree];
   }, [apps.length]);
-
-  // useEffect(() => {
-  //   window.addEventListener('resize', function () {
-  //     console.log(1);
-  //   });
-  // }, []);
 
   if (apps?.length === 0) return null;
 
@@ -64,33 +60,47 @@ export default function Index(props: any) {
       const { x, y } = position;
       const browserWidth = window.innerWidth;
       const browserHeight = window.innerHeight;
-      const floatButtonNavWidth = document?.getElementById('floatButtonNav')?.clientHeight || 64;
-      const floatButtonNavHeight = document?.getElementById('floatButtonNav')?.clientHeight || 64;
-      console.log(position, floatButtonNavHeight, floatButtonNavWidth);
+      const floatButtonNav = document?.getElementById('floatButtonNav');
+      if (!floatButtonNav) return;
 
+      const distanceLeft = floatButtonNav.getBoundingClientRect().left;
+      const floatButtonNavWidth = floatButtonNav.clientHeight || 64;
+      const floatButtonNavHeight = floatButtonNav.clientHeight || 64;
       // 120 is absolute positioning; 10 Boundary distance;
       const leftBoundary = -browserWidth + floatButtonNavWidth + 120 + 10;
       const rightBoundary = 120 - 10;
       const topBoundary = -browserHeight + floatButtonNavHeight + 120;
       const bottomBoundary = 120;
+      const isLeft = distanceLeft < browserWidth / 2;
 
       setPosition({
         x: x < leftBoundary ? leftBoundary : x > rightBoundary ? rightBoundary : x,
         y: y < topBoundary ? topBoundary : y > bottomBoundary ? bottomBoundary : y
       });
 
-      // Button Suction State
-      if (x < leftBoundary) {
-        setSuction(Suction.Left);
+      // The method of dealing with suction edge
+      const handleSuction = (suction: Suction) => {
+        onClose();
+        setSuction(suction);
         setTimeout(() => {
           setLockSuction(false);
         }, 1000);
-      } else if (x > rightBoundary) {
-        setSuction(Suction.Right);
-        setTimeout(() => {
-          setLockSuction(false);
-        }, 1000);
-      }
+      };
+      // Handle the suction edge
+      x < leftBoundary
+        ? handleSuction(Suction.Left)
+        : x > rightBoundary
+        ? handleSuction(Suction.Right)
+        : null;
+
+      // 1 minute no operation, automatic edge Suction
+      // if (timeoutRef.current) {
+      //   clearTimeout(timeoutRef.current);
+      // }
+      // // @ts-ignore
+      // timeoutRef.current = setTimeout(() => {
+      //   isLeft ? handleSuction(Suction.Left) : handleSuction(Suction.Right);
+      // }, 1 * 1000);
     } catch (error) {
       console.log(error);
     }
@@ -111,7 +121,6 @@ export default function Index(props: any) {
         setEndPosition(position);
       }}
       handle="#centerButton"
-      // nodeRef={dragDom}
       position={position}
     >
       <div
@@ -149,6 +158,9 @@ export default function Index(props: any) {
                     ? `rotate(${degree * (index + 1)}deg) skew(${90 - degree}deg)`
                     : `rotate(75deg) skew(60deg)`
                 }
+                onClick={(e) => {
+                  openApp(item);
+                }}
               >
                 <Flex
                   justifyContent={'center'}
@@ -166,7 +178,7 @@ export default function Index(props: any) {
                     // The icon is perpendicular to the x-axis of the page
                     transform={calculateDegree(index + 1)}
                   >
-                    <img src={item?.icon} alt={item?.name} />
+                    <img className={styles.imageItem} src={item?.icon} alt={item?.name} />
                   </Flex>
                 </Flex>
               </Box>
