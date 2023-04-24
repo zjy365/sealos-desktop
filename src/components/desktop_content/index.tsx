@@ -1,15 +1,14 @@
 /* eslint-disable @next/next/no-img-element */
 import AppWindow from '@/components/app_window';
+import MoreButton from '@/components/more_button';
+import UserMenu from '@/components/user_menu';
 import useAppStore from '@/stores/app';
 import { APPTYPE, TApp } from '@/types';
-import { Flex, Box, Grid, GridItem, Text } from '@chakra-ui/react';
-import { useMemo } from 'react';
-import IframeApp from './iframe_app';
-import styles from './index.module.scss';
-import Image from 'next/image';
-import { MouseEvent, MouseEventHandler } from 'react';
+import { Box, Flex, Grid, GridItem, Text } from '@chakra-ui/react';
 import dynamic from 'next/dynamic';
+import { MouseEvent, useMemo } from 'react';
 import IframeWindow from './iframe_window';
+import styles from './index.module.scss';
 
 const TimeComponent = dynamic(() => import('./time'), {
   ssr: false
@@ -95,6 +94,8 @@ export default function DesktopContent(props: any) {
               </GridItem>
             ))}
         </Grid>
+        <MoreButton />
+        <UserMenu />
       </Flex>
 
       {/* opened apps */}

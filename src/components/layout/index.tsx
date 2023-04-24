@@ -1,12 +1,12 @@
 import { Background } from '@/components/background';
 import DesktopContent from '@/components/desktop_content';
+import FloatButton from '@/components/floating_button';
 import useAppStore from '@/stores/app';
 import useSessionStore from '@/stores/session';
 import Head from 'next/head';
 import { useEffect } from 'react';
 import { createMasterAPP } from 'sealos-desktop-sdk/master';
 import styles from './index.module.scss';
-import FloatButton from '@/components/floating_button';
 
 export default function Layout(props: any) {
   const { init } = useAppStore((state) => state);
