@@ -9,8 +9,8 @@ import styles from './index.module.scss';
 import Iconfont from '../iconfont';
 enum Suction {
   None,
-  Left,
-  Right
+  Left = 'left',
+  Right = 'right'
 }
 
 export default function Index(props: any) {
@@ -114,10 +114,14 @@ export default function Index(props: any) {
       // nodeRef={dragDom}
       position={position}
     >
-      <div id="floatButtonNav" className={styles.container} data-isopen={isOpen}>
+      <div
+        id="floatButtonNav"
+        className={clsx(styles.container, dragging ? styles.notrans : '')}
+        data-isopen={isOpen}
+      >
         <div
-          className={styles.floatBtn}
-          style={{ display: suction === Suction.None ? 'block' : 'none' }}
+          className={clsx(styles.floatBtn, dragging ? styles.notrans : '')}
+          data-suction={suction}
         >
           <div className={styles.innerBtn}>
             <div id="centerButton" className={styles.centerBtn} onClick={handleCenterButton}></div>
@@ -181,7 +185,6 @@ export default function Index(props: any) {
             setSuction(Suction.None);
           }}
           onMouseEnter={() => {
-            console.log(suction);
             if (!lockSuction) {
               setSuction(Suction.None);
             }
