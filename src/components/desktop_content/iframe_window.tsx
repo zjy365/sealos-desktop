@@ -4,7 +4,6 @@ import styles from './index.module.scss';
 
 export default function Iframe_window({ appItem, isShow }: { appItem: TApp; isShow: boolean }) {
   const url = useMemo(() => appItem?.data?.url || '', [appItem?.data?.url]);
-  console.log(url);
 
   return (
     <div className={styles.iframeContainer}>

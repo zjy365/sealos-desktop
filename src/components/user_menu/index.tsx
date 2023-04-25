@@ -8,7 +8,13 @@ export default function Index(props: any) {
   const [notificationAmount, setNotificationAmount] = useState(0);
 
   return (
-    <Flex alignItems={'center'} position={'absolute'} top={'48px'} right={'48px'}>
+    <Flex
+      alignItems={'center'}
+      position={'absolute'}
+      top={'48px'}
+      right={'48px'}
+      cursor={'pointer'}
+    >
       <Flex
         w="32px"
         h="32px"
@@ -17,16 +23,11 @@ export default function Index(props: any) {
         background={'rgba(244, 246, 248, 0.7)'}
         justifyContent={'center'}
         alignItems={'center'}
+        position={'relative'}
       >
         <Iconfont iconName="icon-user" width={20} height={20} color="#24282C"></Iconfont>
-        {showNotification && (
-          <Notification
-            isShow={showNotification}
-            onClose={() => setShowNotification(false)}
-            onAmount={(amount) => setNotificationAmount(amount)}
-          />
-        )}
       </Flex>
+
       <Flex
         w="32px"
         h="32px"
@@ -34,8 +35,18 @@ export default function Index(props: any) {
         background={'rgba(244, 246, 248, 0.7)'}
         justifyContent={'center'}
         alignItems={'center'}
+        position={'relative'}
       >
-        <Iconfont iconName="icon-notifications" width={20} height={20} color="#24282C"></Iconfont>
+        <Box onClick={() => setShowNotification((val) => !val)}>
+          <Iconfont iconName="icon-notifications" width={20} height={20} color="#24282C"></Iconfont>
+        </Box>
+        {showNotification && (
+          <Notification
+            isShow={showNotification}
+            onClose={() => setShowNotification(false)}
+            onAmount={(amount) => setNotificationAmount(amount)}
+          />
+        )}
       </Flex>
     </Flex>
   );

@@ -3,10 +3,11 @@ import useAppStore from '@/stores/app';
 import { TApp } from '@/types';
 import { Box, Flex, useDisclosure } from '@chakra-ui/react';
 import clsx from 'clsx';
-import { MouseEvent, useMemo, useRef, useState } from 'react';
+import { MouseEvent, useEffect, useMemo, useRef, useState } from 'react';
 import Draggable, { DraggableEventHandler } from 'react-draggable';
 import Iconfont from '../iconfont';
 import styles from './index.module.scss';
+import { debounce, throttle } from 'lodash';
 
 enum Suction {
   None,
@@ -33,6 +34,21 @@ export default function Index(props: any) {
     return [temp, skewDegree, rotateDegree];
   }, [apps.length]);
 
+  // useEffect(() => {
+  //   const handleResize = () => {
+  //     console.log('resize');
+  //     const floatButtonNav = document?.getElementById('floatButtonNav');
+  //     if (floatButtonNav && suction === Suction.Left) {
+  //       const distanceLeft = floatButtonNav.getBoundingClientRect().left;
+  //       console.log(distanceLeft, position);
+  //       setPosition({ x: position.x - distanceLeft + 10, y: position.y });
+  //     }
+  //   };
+  //   console.log('1');
+  //   window.addEventListener('resize', debounce(handleResize, 2000));
+  //   return () => window.removeEventListener('resize', handleResize);
+  // }, [suction]);
+
   if (apps?.length === 0) return null;
 
   // Determine whether to drag or click
@@ -56,6 +72,8 @@ export default function Index(props: any) {
   // drag boundary calculation
   const handleDragBoundary: DraggableEventHandler = (e, position) => {
     try {
+      console.log('stop');
+
       setLockSuction(true);
       const { x, y } = position;
       const browserWidth = window.innerWidth;
@@ -178,7 +196,7 @@ export default function Index(props: any) {
                     // The icon is perpendicular to the x-axis of the page
                     transform={calculateDegree(index + 1)}
                   >
-                    <img className={styles.imageItem} src={item?.icon} alt={item?.name} />
+                    <img src={item?.icon} alt={item?.name} />
                   </Flex>
                 </Flex>
               </Box>
