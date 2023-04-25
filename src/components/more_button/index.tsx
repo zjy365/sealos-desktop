@@ -1,7 +1,7 @@
 import { Flex, Text, Box } from '@chakra-ui/react';
 import Iconfont from '../iconfont';
 
-export default function Index(props: any) {
+export default function Index() {
   return (
     <Flex
       justifyContent={'center'}

@@ -2,10 +2,13 @@ import { Box, Flex } from '@chakra-ui/react';
 import Iconfont from '../iconfont';
 import Notification from '@/components/notification';
 import { useState } from 'react';
+import Account from '@/components/account';
+import { useDisclosure } from '@chakra-ui/react';
 
-export default function Index(props: any) {
+export default function Index() {
   const [showNotification, setShowNotification] = useState(false);
   const [notificationAmount, setNotificationAmount] = useState(0);
+  const accountDisclosure = useDisclosure();
 
   return (
     <Flex
@@ -25,7 +28,12 @@ export default function Index(props: any) {
         alignItems={'center'}
         position={'relative'}
       >
-        <Iconfont iconName="icon-user" width={20} height={20} color="#24282C"></Iconfont>
+        <Box
+          onClick={accountDisclosure.isOpen ? accountDisclosure.onClose : accountDisclosure.onOpen}
+        >
+          <Iconfont iconName="icon-user" width={20} height={20} color="#24282C"></Iconfont>
+        </Box>
+        {accountDisclosure.isOpen && <Account accountDisclosure={accountDisclosure} />}
       </Flex>
 
       <Flex
