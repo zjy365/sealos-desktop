@@ -27,6 +27,7 @@ export default function Index() {
         justifyContent={'center'}
         alignItems={'center'}
         position={'relative'}
+        boxShadow={'0px 1.2px 2.3px rgba(0, 0, 0, 0.2)'}
       >
         <Box
           onClick={accountDisclosure.isOpen ? accountDisclosure.onClose : accountDisclosure.onOpen}
@@ -44,6 +45,7 @@ export default function Index() {
         justifyContent={'center'}
         alignItems={'center'}
         position={'relative'}
+        boxShadow={'0px 1.2px 2.3px rgba(0, 0, 0, 0.2)'}
       >
         <Box onClick={() => setShowNotification((val) => !val)}>
           <Iconfont iconName="icon-notifications" width={20} height={20} color="#24282C"></Iconfont>

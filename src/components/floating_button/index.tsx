@@ -196,7 +196,9 @@ export default function Index(props: any) {
                     w="32px"
                     h="32px"
                     backgroundColor={'rgba(244, 246, 248, 0.9)'}
+                    border={'1px solid #FFFFFF'}
                     borderRadius={'50%'}
+                    boxShadow={'0px 0.5px 1px rgba(0, 0, 0, 0.2)'}
                     p={'4px'}
                     // The icon is perpendicular to the x-axis of the page
                     transform={calculateDegree(index + 1)}

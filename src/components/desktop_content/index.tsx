@@ -74,7 +74,9 @@ export default function DesktopContent(props: any) {
                   w="72px"
                   h="72px"
                   p={'15px'}
+                  border={'1px solid #FFFFFF'}
                   borderRadius={8}
+                  boxShadow={'0px 1.16667px 2.33333px rgba(0, 0, 0, 0.2)'}
                   backgroundColor={'rgba(244, 246, 248, 0.9)'}
                   onClick={(e) => handleDoubleClick(e, item)}
                   // onDoubleClick={(e) => handleDoubleClick(e, item)}
@@ -82,10 +84,11 @@ export default function DesktopContent(props: any) {
                   <img width={'100%'} height={'100%'} alt="app" src={item?.icon}></img>
                 </Box>
                 <Text
+                  textShadow={'0px 1px 2px rgba(0, 0, 0, 0.4)'}
                   textAlign={'center'}
                   mt="8px"
                   color={'#FFFFFF'}
-                  fontWeight={500}
+                  // fontWeight={400}
                   fontSize={'10px'}
                   lineHeight={'16px'}
                 >
