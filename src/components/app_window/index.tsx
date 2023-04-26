@@ -77,7 +77,7 @@ export default function AppWindow(props: {
       >
         {/* app window header */}
         <Flex
-          h="32px"
+          h="28px"
           background={'#F7F8FA'}
           className={'windowHeader'}
           borderRadius={'6px 6px 0 0'}

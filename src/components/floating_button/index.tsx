@@ -78,8 +78,6 @@ export default function Index(props: any) {
   // drag boundary calculation
   const handleDragBoundary: DraggableEventHandler = (e, position) => {
     try {
-      console.log('stop');
-
       setLockSuction(true);
       const { x, y } = position;
       const browserWidth = window.innerWidth;
@@ -150,11 +148,13 @@ export default function Index(props: any) {
       <div
         id="floatButtonNav"
         className={clsx(styles.container, dragging ? styles.notrans : '')}
-        data-isopen={isOpen}
+        data-open={isOpen}
       >
         <div
           className={clsx(styles.floatBtn, dragging ? styles.notrans : '')}
           data-suction={suction}
+          onMouseEnter={onOpen}
+          onMouseLeave={onClose}
         >
           <div className={styles.innerBtn}>
             <div id="centerButton" className={styles.centerBtn} onClick={handleCenterButton}></div>
@@ -166,6 +166,8 @@ export default function Index(props: any) {
           className={styles.cricleNav}
           data-open={isOpen}
           userSelect={'none'}
+          onMouseEnter={onOpen}
+          onMouseLeave={onClose}
           style={{ display: suction === Suction.None ? 'block' : 'none' }}
         >
           {apps?.map((item: TApp, index: number) => {
