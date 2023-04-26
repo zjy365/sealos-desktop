@@ -61,8 +61,11 @@
 }
 
 .uicon {
+  width: 46px;
   height: 100%;
-  padding: 8px 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   transition: all ease-in-out 60ms;
 
   img {

@@ -26,6 +26,12 @@ export default function Index(props: any) {
   const [lockSuction, setLockSuction] = useState(true);
   const timeoutRef = useRef(null);
 
+  // const fillApps = useMemo(() => {
+  //   if (apps.length < 6) {
+  //     apps.concat(Array(6 - length).fill(0));
+  //   }
+  // }, [apps]);
+
   const [degree, contentSkewDegree, contentRotateDegree] = useMemo(() => {
     const len = apps?.length < 6 ? 6 : apps?.length;
     const temp: number = 360 / len;
@@ -157,7 +163,7 @@ export default function Index(props: any) {
 
         {/* menu */}
         <Box
-          className={clsx(styles.cricleNav, isOpen && styles.openedNav)}
+          className={styles.cricleNav}
           data-open={isOpen}
           userSelect={'none'}
           style={{ display: suction === Suction.None ? 'block' : 'none' }}
@@ -174,13 +180,14 @@ export default function Index(props: any) {
                     ? `rotate(${degree * (index + 1)}deg) skew(${90 - degree}deg)`
                     : `rotate(75deg) skew(60deg)`
                 }
+                _hover={{ bg: 'rgba(21, 37, 57, 0.8)' }}
                 onClick={(e) => {
                   openApp(item);
                 }}
               >
                 <Flex
                   justifyContent={'center'}
-                  pt="8px"
+                  pt="12px"
                   className={styles.subItem}
                   // The icon is perpendicular to the center of the circle
                   transform={`skew(${contentSkewDegree}deg) rotate(${contentRotateDegree}deg)`}

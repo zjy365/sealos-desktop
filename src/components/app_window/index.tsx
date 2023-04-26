@@ -99,7 +99,7 @@ export default function AppWindow(props: {
             </Box>
           </Flex>
           <Flex ml={'auto'}>
-            <div
+            <Box
               className={styles.uicon}
               onClick={(e) => {
                 e.stopPropagation();
@@ -111,10 +111,12 @@ export default function AppWindow(props: {
               }}
             >
               <img src="/icons/minimize.png" width={12} />
-            </div>
-            <div
+            </Box>
+            <Box
               className={styles.uicon}
               onClick={(e) => {
+                console.log(wnapp, 'update');
+
                 e.stopPropagation();
                 e.preventDefault();
                 updateOpenedAppInfo({
@@ -129,8 +131,8 @@ export default function AppWindow(props: {
                 src={wnapp.size === 'maximize' ? '/icons/maximize.png' : '/icons/maxmin.png'}
                 width={12}
               />
-            </div>
-            <div
+            </Box>
+            <Box
               className={clsx(styles.uicon)}
               data-type={'close'}
               onClick={(e) => {
@@ -144,7 +146,7 @@ export default function AppWindow(props: {
               }}
             >
               <img src={'/icons/close.png'} width={12} />
-            </div>
+            </Box>
           </Flex>
         </Flex>
         {/* app window content */}
