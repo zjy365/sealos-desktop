@@ -1,14 +1,17 @@
+/* eslint-disable @next/next/no-img-element */
 import { Box, Flex } from '@chakra-ui/react';
 import Iconfont from '../iconfont';
 import Notification from '@/components/notification';
 import { useState } from 'react';
 import Account from '@/components/account';
 import { useDisclosure } from '@chakra-ui/react';
+import useSessionStore from '@/stores/session';
 
 export default function Index() {
   const [showNotification, setShowNotification] = useState(false);
   const [notificationAmount, setNotificationAmount] = useState(0);
   const accountDisclosure = useDisclosure();
+  const { user } = useSessionStore((state) => state.getSession());
 
   return (
     <Flex
@@ -21,7 +24,7 @@ export default function Index() {
       <Flex
         w="32px"
         h="32px"
-        mx="8px"
+        mx="16px"
         borderRadius={'50%'}
         background={'rgba(244, 246, 248, 0.7)'}
         justifyContent={'center'}
@@ -32,7 +35,17 @@ export default function Index() {
         <Box
           onClick={accountDisclosure.isOpen ? accountDisclosure.onClose : accountDisclosure.onOpen}
         >
-          <Iconfont iconName="icon-user" width={20} height={20} color="#24282C"></Iconfont>
+          {user?.avatar ? (
+            <img
+              width={32}
+              height={32}
+              style={{ borderRadius: '50%' }}
+              src={user.avatar}
+              alt="user avator"
+            />
+          ) : (
+            <Iconfont iconName="icon-user" width={20} height={20} color="#24282C"></Iconfont>
+          )}
         </Box>
         {accountDisclosure.isOpen && <Account accountDisclosure={accountDisclosure} />}
       </Flex>

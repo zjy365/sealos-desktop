@@ -153,8 +153,8 @@ export default function Index(props: any) {
         <div
           className={clsx(styles.floatBtn, dragging ? styles.notrans : '')}
           data-suction={suction}
-          onMouseEnter={onOpen}
-          onMouseLeave={onClose}
+          // onMouseEnter={dragging ? () => {} : onOpen}
+          // onMouseLeave={dragging ? () => {} : onClose}
         >
           <div className={styles.innerBtn}>
             <div id="centerButton" className={styles.centerBtn} onClick={handleCenterButton}></div>
@@ -166,8 +166,8 @@ export default function Index(props: any) {
           className={styles.cricleNav}
           data-open={isOpen}
           userSelect={'none'}
-          onMouseEnter={onOpen}
-          onMouseLeave={onClose}
+          // onMouseEnter={onOpen}
+          // onMouseLeave={onClose}
           style={{ display: suction === Suction.None ? 'block' : 'none' }}
         >
           {apps?.map((item: TApp, index: number) => {
