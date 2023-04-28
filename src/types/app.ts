@@ -3,34 +3,20 @@ export enum APPTYPE {
   IFRAME = 'iframe',
   LINK = 'link'
 }
-
+export type WindowSize = 'maximize' | 'maxmin' | 'minimize'
 export type TAppFront = {
   isShow: boolean;
   zIndex: number;
-  size: 'maximize' | 'maxmin' | 'minimize';
-  cacheSize: 'maximize' | 'maxmin' | 'minimize';
+  size: WindowSize;
+  cacheSize: WindowSize;
   style: {
     width?: number | string;
     height?: number | string;
     isFull?: boolean;
     bg?: string;
   };
-  mask: boolean;
-  order: number;
   mouseDowning: boolean;
 };
-
-export const initialFrantState: TAppFront = {
-  isShow: false,
-  zIndex: 1,
-  size: 'maximize',
-  cacheSize: 'maximize',
-  style: {},
-  mask: true,
-  order: 0,
-  mouseDowning: false
-};
-
 export type TAppConfig = {
   // app key
   key: string;
@@ -44,7 +30,7 @@ export type TAppConfig = {
   data: {
     url: string;
     desc: string;
-    [key: string]: string;
+    // [key: string]: string;
   };
   // app gallery
   gallery: string[];
@@ -56,9 +42,19 @@ export type TAppConfig = {
     helpDocs: boolean | string;
   };
 };
+export const initialFrantState: TAppFront = {
+  isShow: false,
+  zIndex: 1,
+  size: 'maximize',
+  cacheSize: 'maximize',
+  style: {},
+  mouseDowning: false
+};
+
+
 
 export type TApp = TAppConfig & TAppFront;
-
+export type Pid = number;
 export type TOSState = {
   installedApps: TApp[];
 

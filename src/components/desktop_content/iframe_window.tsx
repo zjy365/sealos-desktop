@@ -1,9 +1,12 @@
-import { TApp } from '@/types';
+import { Pid, TApp } from '@/types';
 import { useMemo } from 'react';
 import styles from './index.module.scss';
+import useAppStore from '@/stores/app';
 
-export default function Iframe_window({ appItem, isShow }: { appItem: TApp; isShow: boolean }) {
-  const url = useMemo(() => appItem?.data?.url || '', [appItem?.data?.url]);
+export default function Iframe_window({ pid }: { pid: Pid}) {
+  const findAppInfo = useAppStore((state) => state.findAppInfo);
+  const app = findAppInfo(pid);
+  const url = useMemo(() => app?.data?.url || '', [app?.data?.url]);
 
   return (
     <div className={styles.iframeContainer}>
@@ -12,7 +15,7 @@ export default function Iframe_window({ appItem, isShow }: { appItem: TApp; isSh
           className={styles.iframeContainer}
           src={url}
           allow="camera;microphone;clipboard-write;"
-          id={`app-window-${appItem.key}`}
+          id={`app-window-${app?.key}`}
         />
       )}
     </div>
