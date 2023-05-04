@@ -5,7 +5,6 @@ import { devtools, persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 import AppStateManager from '../utils/ProcessManager';
 import { wait } from '@/utils/delay';
-import { assert } from 'console';
 const storageOrderKey = 'app-orders';
 // type AppInfo = TApp & { pid: Pid };
 type AppController = Omit<
@@ -35,8 +34,8 @@ type AppController = Omit<
   setToHighestLayer: (pid: Pid) => void;
   updateOpenedAppInfo: (app: Tapp) => void;
 };
-type Tapp = Omit<TApp, 'mask'|'order'> & {pid:Pid}
-class AppInfo {
+type Tapp = Omit<TApp, 'mask' | 'order'> & { pid: Pid };
+export class AppInfo {
   pid: number;
   isShow: boolean;
   zIndex: number;
@@ -123,12 +122,11 @@ const useAppStore = create<AppController>()(
         updateOpenedAppInfo: (app: AppInfo) => {
           set((state) => {
             state.runningInfo = state.runningInfo.map((_app) => {
-              if(_app.pid === app.pid) {
-                return app
+              if (_app.pid === app.pid) {
+                return app;
               } else {
                 return _app;
               }
-
             });
           });
         },
@@ -176,20 +174,19 @@ const useAppStore = create<AppController>()(
         // maximize app
         switchApp: (pid: Pid) => {
           // const zIndex = get().maxZIndex + 1;
-          console.log('switchApp')
+          console.log('switchApp');
           set((state) => {
-            let _app = state.runningInfo.find((item) => item.pid === pid)
+            let _app = state.runningInfo.find((item) => item.pid === pid);
             if (!_app) return;
             _app.isShow = true;
-            _app.size = _app.cacheSize
+            _app.size = _app.cacheSize;
             state.setToHighestLayer(pid);
-
           });
         },
         // get switch floor function
         setToHighestLayer: (pid: Pid) => {
           const zIndex = get().maxZIndex + 1;
-          console.log(zIndex)
+          console.log(zIndex);
           set((state) => {
             let _app = state.runningInfo.find((item) => item.pid === pid)!;
             console.assert(!!_app, 'error: app is not running');

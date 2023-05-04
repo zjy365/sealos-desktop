@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import useAppStore from '@/stores/app';
+import useAppStore, { AppInfo } from '@/stores/app';
 import { TApp } from '@/types';
 import { Box, Flex, useDisclosure } from '@chakra-ui/react';
 import clsx from 'clsx';
@@ -16,7 +16,13 @@ enum Suction {
 }
 
 export default function Index(props: any) {
-  const { installedApps: apps, openApp } = useAppStore((state) => state);
+  const {
+    installedApps: apps,
+    openApp,
+    runningInfo,
+    setToHighestLayer,
+    currentAppPid
+  } = useAppStore((state) => state);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [dragging, setDragging] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });
@@ -25,7 +31,6 @@ export default function Index(props: any) {
   const [suction, setSuction] = useState(Suction.None);
   const [lockSuction, setLockSuction] = useState(true);
   const timeoutRef = useRef(null);
-
   // const fillApps = useMemo(() => {
   //   if (apps.length < 6) {
   //     apps.concat(Array(6 - length).fill(0));
@@ -170,7 +175,7 @@ export default function Index(props: any) {
           // onMouseLeave={onClose}
           style={{ display: suction === Suction.None ? 'block' : 'none' }}
         >
-          {apps?.map((item: TApp, index: number) => {
+          {runningInfo?.map((item: AppInfo, index: number) => {
             return (
               <Box
                 cursor={'pointer'}
@@ -185,6 +190,7 @@ export default function Index(props: any) {
                 _hover={{ bg: 'rgba(21, 37, 57, 0.8)' }}
                 onClick={(e) => {
                   openApp(item);
+                  setToHighestLayer(item.pid);
                 }}
               >
                 <Flex
@@ -195,17 +201,26 @@ export default function Index(props: any) {
                   transform={`skew(${contentSkewDegree}deg) rotate(${contentRotateDegree}deg)`}
                 >
                   <Flex
-                    w="32px"
-                    h="32px"
-                    backgroundColor={'rgba(244, 246, 248, 0.9)'}
-                    border={'1px solid #FFFFFF'}
+                    w="40px"
+                    h="40px"
+                    background={currentAppPid === item.pid ? 'rgba(244, 246, 248, 0.6)' : ''}
                     borderRadius={'50%'}
-                    boxShadow={'0px 0.5px 1px rgba(0, 0, 0, 0.2)'}
-                    p={'4px'}
-                    // The icon is perpendicular to the x-axis of the page
-                    transform={calculateDegree(index + 1)}
+                    justifyContent={'center'}
+                    alignItems={'center'}
                   >
-                    <img src={item?.icon} alt={item?.name} />
+                    <Flex
+                      w="32px"
+                      h="32px"
+                      backgroundColor={'rgba(244, 246, 248, 0.9)'}
+                      border={'1px solid #FFFFFF'}
+                      borderRadius={'50%'}
+                      boxShadow={'0px 0.5px 1px rgba(0, 0, 0, 0.2)'}
+                      p={'4px'}
+                      // The icon is perpendicular to the x-axis of the page
+                      transform={calculateDegree(index + 1)}
+                    >
+                      <img src={item?.icon} alt={item?.name} />
+                    </Flex>
                   </Flex>
                 </Flex>
               </Box>

@@ -1,5 +1,5 @@
 .container {
-  position: absolute;
+  position: fixed;
   bottom: 120px;
   right: 120px;
   z-index: 9999;
@@ -34,7 +34,7 @@
 }
 
 .floatBtn {
-  position: absolute;
+  position: fixed;
   z-index: 9999;
   width: 64px;
   height: 64px;
@@ -80,7 +80,7 @@
 }
 
 .cricleNav {
-  position: absolute;
+  position: fixed;
   z-index: 9998;
   width: 200px;
   height: 200px;
