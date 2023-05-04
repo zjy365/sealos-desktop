@@ -4,6 +4,7 @@ export default function Document() {
   return (
     <Html lang="en">
       <Head>
+        <script src="/iconfont/iconfont.js" async></script>
         <meta name="application-name" content="Sealos" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
@@ -19,7 +20,6 @@ export default function Document() {
         <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png" />
         <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png" />
         <link rel="shortcut icon" href="/favicon.ico" />
-        <script src="/iconfont/iconfont.js" async></script>
       </Head>
       <body>
         <Main />
