@@ -62,7 +62,7 @@ export default function Index({ accountDisclosure }: { accountDisclosure: UseDis
         borderRadius={'8px'}
         p="20px"
       >
-        <Flex justifyContent={'end'} alignItems={'center'} overflow={'hidden'}>
+        <Flex justifyContent={'end'} alignItems={'center'} overflow={'hidden'} onClick={logout}>
           <Iconfont iconName="icon-logout" width={14} height={14} color="#24282C"></Iconfont>
           <Text ml="6px" color={'#24282C'} fontSize={'12px'} fontWeight={500}>
             退出账号
