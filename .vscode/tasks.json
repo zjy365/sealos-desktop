@@ -1,0 +1,17 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "为 /etc/hosts 追加 io 服务器",
+      "type": "shell",
+      "command": "echo '35.240.227.100 apiserver.cluster.local' | sudo tee -a /etc/hosts",
+      "problemMatcher": []
+    },
+    {
+      "label": "为 /etc/hosts 追加 cn 服务器",
+      "type": "shell",
+      "command": "echo '121.41.82.246 apiserver.cluster.local' | sudo tee -a /etc/hosts",
+      "problemMatcher": []
+    }
+  ]
+}

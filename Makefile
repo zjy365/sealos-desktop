@@ -1,7 +1,7 @@
 
 SERVICE_NAME=desktop-frontend
 # Image URL to use all building/pushing image targets
-IMG ?= $(SERVICE_NAME):new-1.0.0
+IMG ?= $(SERVICE_NAME):latest
 
 .PHONY: all
 all: docker-build-and-push
