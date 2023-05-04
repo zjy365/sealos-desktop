@@ -21,8 +21,9 @@ export default function Index(props: any) {
     openApp,
     runningInfo,
     setToHighestLayer,
-    currentAppPid
-  } = useAppStore((state) => state);
+    currentAppPid,
+    switchApp
+  } = useAppStore();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [dragging, setDragging] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });
@@ -189,6 +190,7 @@ export default function Index(props: any) {
                 }
                 _hover={{ bg: 'rgba(21, 37, 57, 0.8)' }}
                 onClick={(e) => {
+                  // switchApp(item.pid);
                   openApp(item);
                   setToHighestLayer(item.pid);
                 }}

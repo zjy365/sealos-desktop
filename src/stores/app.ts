@@ -1,10 +1,10 @@
 import request from '@/services/request';
-import { TOSState, TApp, initialFrantState, APPTYPE, Pid } from '@/types';
+import { APPTYPE, Pid, TApp, TOSState } from '@/types';
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 import AppStateManager from '../utils/ProcessManager';
-import { wait } from '@/utils/delay';
+import { formatUrl } from '@/utils/format';
 const storageOrderKey = 'app-orders';
 // type AppInfo = TApp & { pid: Pid };
 type AppController = Omit<
@@ -91,7 +91,6 @@ const useAppStore = create<AppController>()(
         runner: new AppStateManager([]),
         init: async () => {
           const res = await request('/api/desktop/getInstalledApps');
-          console.log(res);
           set((state) => {
             state.installedApps = res?.data?.map((app: TApp) => new AppInfo(app, -1));
             state.runner.loadApps(state.installedApps.map((app) => app.key));
@@ -103,7 +102,6 @@ const useAppStore = create<AppController>()(
           set((state) => {
             state.runner.closeApp(pid);
             // make sure the process is killed
-            console.assert(!get().runner.findState(pid), 'error: process is not killed');
             state.runningInfo = state.runningInfo.filter((item) => item.pid !== pid);
           });
         },
@@ -116,7 +114,6 @@ const useAppStore = create<AppController>()(
         },
         findAppInfo: (pid: Pid) => {
           // make sure the process is running
-          console.assert(!!get().runner.findState(pid));
           return get().runningInfo.find((item) => item.pid === pid);
         },
         updateOpenedAppInfo: (app: AppInfo) => {
@@ -144,7 +141,7 @@ const useAppStore = create<AppController>()(
           });
         },
 
-        openApp: async (app: TApp) => {
+        openApp: async (app: TApp, query: Record<string, string> = {}) => {
           const zIndex = get().maxZIndex + 1;
           // debugger
           // 未支持多实例
@@ -162,7 +159,10 @@ const useAppStore = create<AppController>()(
           _app.zIndex = zIndex;
           _app.size = 'maximize';
           _app.isShow = true;
-
+          // add query to url
+          if (_app.data?.url) {
+            _app.data.url = formatUrl(_app.data.url, query);
+          }
           // get().updateOpenedAppInfo(_app);
 
           set((state) => {
@@ -174,7 +174,6 @@ const useAppStore = create<AppController>()(
         // maximize app
         switchApp: (pid: Pid) => {
           // const zIndex = get().maxZIndex + 1;
-          console.log('switchApp');
           set((state) => {
             let _app = state.runningInfo.find((item) => item.pid === pid);
             if (!_app) return;
@@ -186,14 +185,10 @@ const useAppStore = create<AppController>()(
         // get switch floor function
         setToHighestLayer: (pid: Pid) => {
           const zIndex = get().maxZIndex + 1;
-          console.log(zIndex);
           set((state) => {
             let _app = state.runningInfo.find((item) => item.pid === pid)!;
-            console.assert(!!_app, 'error: app is not running');
-
             _app.zIndex = zIndex;
             get().updateOpenedAppInfo(_app);
-
             state.currentAppPid = pid;
             state.maxZIndex = zIndex;
           });

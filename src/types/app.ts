@@ -3,7 +3,7 @@ export enum APPTYPE {
   IFRAME = 'iframe',
   LINK = 'link'
 }
-export type WindowSize = 'maximize' | 'maxmin' | 'minimize'
+export type WindowSize = 'maximize' | 'maxmin' | 'minimize';
 export type TAppFront = {
   isShow: boolean;
   zIndex: number;
@@ -51,8 +51,6 @@ export const initialFrantState: TAppFront = {
   mouseDowning: false
 };
 
-
-
 export type TApp = TAppConfig & TAppFront;
 export type Pid = number;
 export type TOSState = {
@@ -71,7 +69,7 @@ export type TOSState = {
   currentApp?: TApp;
 
   // init desktop
-  init(): void;
+  init(): Promise<void>;
 
   // get all apps of the app store
   getAllApps(): void;
@@ -80,7 +78,7 @@ export type TOSState = {
   closeApp(name: string): void;
 
   // open the app
-  openApp(app: TApp): void;
+  openApp(app: TApp, query?: Record<string, string>): void;
 
   // switch the app
   switchApp(app: TApp, type?: 'clickMask'): void;

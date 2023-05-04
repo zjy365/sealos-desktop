@@ -46,6 +46,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // }
     jsonRes(res, { data: apps });
   } catch (err) {
+    console.log(err);
     jsonRes(res, { code: 500, data: err });
   }
 }

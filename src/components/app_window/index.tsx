@@ -16,9 +16,17 @@ export default function AppWindow(props: {
   // desktopHeight: number;
 }) {
   const { pid } = props;
-  const desktopHeight = useDesktopGlobalConfig(state=>state.desktopHeight)
-  const { closeApp, updateOpenedAppInfo, setToHighestLayer, currentApp, currentAppPid, findAppInfo, maxZIndex } = useAppStore();
-  const wnapp = findAppInfo(pid)!
+  const desktopHeight = useDesktopGlobalConfig((state) => state.desktopHeight);
+  const {
+    closeApp,
+    updateOpenedAppInfo,
+    setToHighestLayer,
+    currentApp,
+    currentAppPid,
+    findAppInfo,
+    maxZIndex
+  } = useAppStore();
+  const wnapp = findAppInfo(pid)!;
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const dragDom = useRef<HTMLDivElement>(null);
   const [dragging, setDragging] = useState(false);
@@ -38,8 +46,8 @@ export default function AppWindow(props: {
               ? 0
               : x
             : x > 1.1 * appHeaderWidth
-              ? 0
-              : x,
+            ? 0
+            : x,
         y: y < upperBoundary ? upperBoundary : y > lowerBoundary ? 0 : y
       });
     } else {
@@ -152,13 +160,15 @@ export default function AppWindow(props: {
         </Flex>
         {/* app window content */}
         <Flex flexGrow={1} overflow={'hidden'} borderRadius={'0 0 6px 6px'}>
-            <div
-              className={styles.appMask}
-              onClick={() => {
-                setToHighestLayer(pid)
-              }}
-              style={{"pointerEvents": wnapp.zIndex !== maxZIndex ? "unset":"none"}}
-            ></div>
+          <div
+            className={styles.appMask}
+            onClick={() => {
+              console.log('mask');
+
+              setToHighestLayer(pid);
+            }}
+            style={{ pointerEvents: wnapp.zIndex !== maxZIndex ? 'unset' : 'none' }}
+          ></div>
           {props.children}
         </Flex>
       </div>

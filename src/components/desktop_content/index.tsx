@@ -2,13 +2,14 @@
 import AppWindow from '@/components/app_window';
 import MoreButton from '@/components/more_button';
 import useAppStore from '@/stores/app';
-import { APPTYPE, TApp } from '@/types';
+import useDesktopGlobalConfig from '@/stores/desktop';
+import { TApp } from '@/types';
 import { Box, Flex, Grid, GridItem, Text } from '@chakra-ui/react';
 import dynamic from 'next/dynamic';
-import { MouseEvent, useMemo } from 'react';
+import { MouseEvent, useCallback, useEffect, useMemo } from 'react';
+import { createMasterAPP, masterApp } from 'sealos-desktop-sdk/master';
 import IframeWindow from './iframe_window';
 import styles from './index.module.scss';
-import useDesktopGlobalConfig from '@/stores/desktop';
 
 const TimeComponent = dynamic(() => import('./time'), {
   ssr: false
@@ -18,16 +19,11 @@ const UserMenu = dynamic(() => import('@/components/user_menu'), {
 });
 
 export default function DesktopContent(props: any) {
-  const {
-    installedApps: apps,
-    runningInfo,
-    openApp,
-  } = useAppStore((state) => state);
-
+  const { installedApps: apps, runningInfo, openApp, setToHighestLayer } = useAppStore();
   const isBrowser = typeof window !== 'undefined';
   // set DesktopHeight from globalconfig
   const { setDesktopHeight } = useDesktopGlobalConfig();
-  
+
   useMemo(
     () => isBrowser && setDesktopHeight(document.getElementById('desktop')?.clientHeight || 0),
     [isBrowser, setDesktopHeight]
@@ -39,6 +35,42 @@ export default function DesktopContent(props: any) {
       openApp(item);
     }
   };
+
+  /**
+   * open app
+   */
+  const openDesktopApp = useCallback(
+    ({
+      appKey,
+      query = {},
+      messageData = {}
+    }: {
+      appKey: string;
+      query?: Record<string, string>;
+      messageData?: Record<string, any>;
+    }) => {
+      const app = apps.find((item) => item.key === appKey);
+      const runningApp = runningInfo.find((item) => item.key === appKey);
+      if (!app) return;
+      openApp(app, query);
+      if (runningApp) {
+        setToHighestLayer(runningApp.pid);
+      }
+      // post message
+      const iframe = document.getElementById(`app-window-${appKey}`) as HTMLIFrameElement;
+      if (!iframe) return;
+      iframe.contentWindow?.postMessage(messageData, app.data.url);
+    },
+    [apps, openApp, runningInfo, setToHighestLayer]
+  );
+
+  useEffect(() => {
+    return createMasterAPP();
+  }, []);
+
+  useEffect(() => {
+    return masterApp?.addEventListen('openDesktopApp', openDesktopApp);
+  }, [openDesktopApp]);
 
   return (
     <div id="desktop" className={styles.desktop}>
@@ -92,11 +124,7 @@ export default function DesktopContent(props: any) {
       {/* opened apps */}
       {runningInfo.map((process) => {
         return (
-          <AppWindow
-            key={process.pid}
-            style={{ height: '100vh' }}
-            pid={process.pid}
-          >
+          <AppWindow key={process.pid} style={{ height: '100vh' }} pid={process.pid}>
             <IframeWindow pid={process.pid} />
           </AppWindow>
         );
