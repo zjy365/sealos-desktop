@@ -1,24 +1,24 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
 import useAppStore from '@/stores/app';
-import { TApp } from '@/types';
+import { Pid, TApp } from '@/types';
 import { Box, Flex } from '@chakra-ui/react';
 import clsx from 'clsx';
 import React, { useRef, useState } from 'react';
 import Draggable, { DraggableEventHandler } from 'react-draggable';
 import styles from './index.module.scss';
+import useDesktopGlobalConfig from '@/stores/desktop';
 
 export default function AppWindow(props: {
   style?: React.CSSProperties;
-  app: TApp;
+  pid: Pid;
   children: any;
-  desktopHeight: number;
-  desktopWidth: number;
+  // desktopHeight: number;
 }) {
-  const { app: wnapp, desktopHeight, desktopWidth } = props;
-  const { closeApp, updateOpenedAppInfo, switchApp, currentApp, openedApps } = useAppStore(
-    (state) => state
-  );
+  const { pid } = props;
+  const desktopHeight = useDesktopGlobalConfig(state=>state.desktopHeight)
+  const { closeApp, updateOpenedAppInfo, setToHighestLayer, currentApp, currentAppPid, findAppInfo, maxZIndex } = useAppStore();
+  const wnapp = findAppInfo(pid)!
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const dragDom = useRef<HTMLDivElement>(null);
   const [dragging, setDragging] = useState(false);
@@ -28,7 +28,7 @@ export default function AppWindow(props: {
     const appHeaderHeight = dragDom.current?.querySelector('.windowHeader')?.clientHeight || 30;
     const appHeaderWidth = dragDom.current?.querySelector('.windowHeader')?.clientWidth || 3000;
 
-    if (currentApp?.size === 'maxmin') {
+    if (currentApp()?.size === 'maxmin') {
       let upperBoundary = -desktopHeight * 0.1;
       let lowerBoundary = desktopHeight * 0.9 - appHeaderHeight;
       setPosition({
@@ -38,8 +38,8 @@ export default function AppWindow(props: {
               ? 0
               : x
             : x > 1.1 * appHeaderWidth
-            ? 0
-            : x,
+              ? 0
+              : x,
         y: y < upperBoundary ? upperBoundary : y > lowerBoundary ? 0 : y
       });
     } else {
@@ -106,7 +106,8 @@ export default function AppWindow(props: {
                 e.preventDefault();
                 updateOpenedAppInfo({
                   ...wnapp,
-                  size: 'minimize'
+                  size: 'minimize',
+                  cacheSize: wnapp.size
                 });
               }}
             >
@@ -142,7 +143,7 @@ export default function AppWindow(props: {
                   ...wnapp,
                   isShow: false
                 });
-                closeApp(wnapp.name);
+                closeApp(currentAppPid);
               }}
             >
               <img src={'/icons/close.png'} width={12} />
@@ -151,14 +152,13 @@ export default function AppWindow(props: {
         </Flex>
         {/* app window content */}
         <Flex flexGrow={1} overflow={'hidden'} borderRadius={'0 0 6px 6px'}>
-          {wnapp.mask && (
             <div
               className={styles.appMask}
               onClick={() => {
-                switchApp({ ...wnapp, mask: false }, 'clickMask');
+                setToHighestLayer(pid)
               }}
+              style={{"pointerEvents": wnapp.zIndex !== maxZIndex ? "unset":"none"}}
             ></div>
-          )}
           {props.children}
         </Flex>
       </div>

@@ -8,6 +8,7 @@ import dynamic from 'next/dynamic';
 import { MouseEvent, useMemo } from 'react';
 import IframeWindow from './iframe_window';
 import styles from './index.module.scss';
+import useDesktopGlobalConfig from '@/stores/desktop';
 
 const TimeComponent = dynamic(() => import('./time'), {
   ssr: false
@@ -19,33 +20,18 @@ const UserMenu = dynamic(() => import('@/components/user_menu'), {
 export default function DesktopContent(props: any) {
   const {
     installedApps: apps,
-    openedApps,
+    runningInfo,
     openApp,
-    updateAppOrder,
-    updateAppsMousedown
   } = useAppStore((state) => state);
 
   const isBrowser = typeof window !== 'undefined';
-  const DesktopDom = useMemo(
-    () => (isBrowser ? document.getElementById('desktop') : null),
-    [isBrowser]
+  // set DesktopHeight from globalconfig
+  const { setDesktopHeight } = useDesktopGlobalConfig();
+  
+  useMemo(
+    () => isBrowser && setDesktopHeight(document.getElementById('desktop')?.clientHeight || 0),
+    [isBrowser, setDesktopHeight]
   );
-
-  const desktopWidth = DesktopDom?.offsetWidth || 0;
-  const desktopHeight = DesktopDom?.offsetHeight || 0;
-
-  function renderApp(appItem: TApp) {
-    switch (appItem.type) {
-      case APPTYPE.APP:
-        return null;
-
-      case APPTYPE.IFRAME:
-        return <IframeWindow appItem={appItem} isShow={appItem.size !== 'minimize'} />;
-
-      default:
-        break;
-    }
-  }
 
   const handleDoubleClick = (e: MouseEvent<HTMLDivElement>, item: TApp) => {
     e.preventDefault();
@@ -104,16 +90,14 @@ export default function DesktopContent(props: any) {
       </Flex>
 
       {/* opened apps */}
-      {openedApps.map((appItem) => {
+      {runningInfo.map((process) => {
         return (
           <AppWindow
-            key={appItem?.name}
+            key={process.pid}
             style={{ height: '100vh' }}
-            app={appItem}
-            desktopWidth={desktopWidth}
-            desktopHeight={desktopHeight}
+            pid={process.pid}
           >
-            {renderApp(appItem)}
+            <IframeWindow pid={process.pid} />
           </AppWindow>
         );
       })}
