@@ -157,20 +157,25 @@ export default function AppWindow(props: {
             </Box>
           </Flex>
         </Flex>
+        {/* app switch mask */}
+        <div
+          className={styles.appMask}
+          onClick={() => {
+            setToHighestLayer(pid);
+          }}
+          style={{ pointerEvents: wnapp.zIndex !== maxZIndex ? 'unset' : 'none' }}
+        ></div>
         {/* app window content */}
-        <Flex
-          flexGrow={1}
-          overflow={'hidden'}
-          borderRadius={'0 0 6px 6px'}
-          className={dragging ? styles.dragMask : ''}
-        >
-          <div
-            className={styles.appMask}
-            onClick={() => {
-              setToHighestLayer(pid);
-            }}
-            style={{ pointerEvents: wnapp.zIndex !== maxZIndex ? 'unset' : 'none' }}
-          ></div>
+        <Flex flexGrow={1} overflow={'hidden'} borderRadius={'0 0 6px 6px'} position={'relative'}>
+          {dragging && (
+            <Box
+              position={'absolute'}
+              w="100%"
+              h="100%"
+              background={'transparent'}
+              zIndex={8888}
+            ></Box>
+          )}
           {props.children}
         </Flex>
       </div>
