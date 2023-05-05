@@ -135,125 +135,134 @@ export default function Index(props: any) {
   };
 
   return (
-    <Draggable
-      onStart={(e, position) => {
-        setDragging(true);
-        setStartPosition(position);
-      }}
-      onDrag={(e, position) => {
-        setPosition(position);
-      }}
-      onStop={(e, position) => {
-        handleDragBoundary(e, position);
-        setDragging(false);
-        setEndPosition(position);
-      }}
-      handle="#centerButton"
-      position={position}
-    >
-      <div
-        id="floatButtonNav"
-        className={clsx(styles.container, dragging ? styles.notrans : '')}
-        data-open={isOpen}
+    <>
+      <Draggable
+        onStart={(e, position) => {
+          setDragging(true);
+          setStartPosition(position);
+        }}
+        onDrag={(e, position) => {
+          setPosition(position);
+        }}
+        onStop={(e, position) => {
+          handleDragBoundary(e, position);
+          setEndPosition(position);
+          setDragging(false);
+        }}
+        handle="#centerButton"
+        position={position}
       >
         <div
-          className={clsx(styles.floatBtn, dragging ? styles.notrans : '')}
-          data-suction={suction}
-          // onMouseEnter={dragging ? () => {} : onOpen}
-          // onMouseLeave={dragging ? () => {} : onClose}
-        >
-          <div className={styles.innerBtn}>
-            <div id="centerButton" className={styles.centerBtn} onClick={handleCenterButton}></div>
-          </div>
-        </div>
-
-        {/* menu */}
-        <Box
-          className={styles.cricleNav}
+          id="floatButtonNav"
+          className={clsx(styles.container, dragging ? styles.notrans : '')}
           data-open={isOpen}
-          userSelect={'none'}
-          // onMouseEnter={onOpen}
-          // onMouseLeave={onClose}
-          style={{ display: suction === Suction.None ? 'block' : 'none' }}
         >
-          {runningInfo?.map((item: AppInfo, index: number) => {
-            return (
-              <Box
-                cursor={'pointer'}
-                className={styles.navItem}
-                color={'white'}
-                key={item?.name}
-                transform={
-                  isOpen
-                    ? `rotate(${degree * (index + 1)}deg) skew(${90 - degree}deg)`
-                    : `rotate(75deg) skew(60deg)`
-                }
-                _hover={{ bg: 'rgba(21, 37, 57, 0.8)' }}
-                onClick={(e) => {
-                  // switchApp(item.pid);
-                  openApp(item);
-                  setToHighestLayer(item.pid);
-                }}
-              >
-                <Flex
-                  justifyContent={'center'}
-                  pt="12px"
-                  className={styles.subItem}
-                  // The icon is perpendicular to the center of the circle
-                  transform={`skew(${contentSkewDegree}deg) rotate(${contentRotateDegree}deg)`}
+          <div
+            className={clsx(styles.floatBtn, dragging ? styles.notrans : '')}
+            data-suction={suction}
+            // onMouseEnter={dragging ? () => {} : onOpen}
+            // onMouseLeave={dragging ? () => {} : onClose}
+          >
+            <div className={styles.innerBtn}>
+              <div
+                id="centerButton"
+                className={styles.centerBtn}
+                onClick={handleCenterButton}
+              ></div>
+            </div>
+          </div>
+
+          {/* menu */}
+          <Box
+            className={styles.cricleNav}
+            data-open={isOpen}
+            userSelect={'none'}
+            // onMouseEnter={onOpen}
+            // onMouseLeave={onClose}
+            style={{ display: suction === Suction.None ? 'block' : 'none' }}
+          >
+            {runningInfo?.map((item: AppInfo, index: number) => {
+              return (
+                <Box
+                  cursor={'pointer'}
+                  className={styles.navItem}
+                  color={'white'}
+                  key={item?.name}
+                  transform={
+                    isOpen
+                      ? `rotate(${degree * (index + 1)}deg) skew(${90 - degree}deg)`
+                      : `rotate(75deg) skew(60deg)`
+                  }
+                  _hover={{ bg: 'rgba(21, 37, 57, 0.8)' }}
+                  onClick={(e) => {
+                    // switchApp(item.pid);
+                    openApp(item);
+                    setToHighestLayer(item.pid);
+                  }}
                 >
                   <Flex
-                    w="40px"
-                    h="40px"
-                    background={currentAppPid === item.pid ? 'rgba(244, 246, 248, 0.6)' : ''}
-                    borderRadius={'50%'}
                     justifyContent={'center'}
-                    alignItems={'center'}
+                    pt="12px"
+                    className={styles.subItem}
+                    // The icon is perpendicular to the center of the circle
+                    transform={`skew(${contentSkewDegree}deg) rotate(${contentRotateDegree}deg)`}
                   >
                     <Flex
-                      w="32px"
-                      h="32px"
-                      backgroundColor={'rgba(244, 246, 248, 0.9)'}
-                      border={'1px solid #FFFFFF'}
+                      w="40px"
+                      h="40px"
+                      background={currentAppPid === item.pid ? 'rgba(244, 246, 248, 0.6)' : ''}
                       borderRadius={'50%'}
-                      boxShadow={'0px 0.5px 1px rgba(0, 0, 0, 0.2)'}
-                      p={'4px'}
-                      // The icon is perpendicular to the x-axis of the page
-                      transform={calculateDegree(index + 1)}
+                      justifyContent={'center'}
+                      alignItems={'center'}
                     >
-                      <img src={item?.icon} alt={item?.name} />
+                      <Flex
+                        w="32px"
+                        h="32px"
+                        backgroundColor={'rgba(244, 246, 248, 0.9)'}
+                        border={'1px solid #FFFFFF'}
+                        borderRadius={'50%'}
+                        boxShadow={'0px 0.5px 1px rgba(0, 0, 0, 0.2)'}
+                        p={'4px'}
+                        // The icon is perpendicular to the x-axis of the page
+                        transform={calculateDegree(index + 1)}
+                      >
+                        <img src={item?.icon} alt={item?.name} />
+                      </Flex>
                     </Flex>
                   </Flex>
-                </Flex>
-              </Box>
-            );
-          })}
-        </Box>
-        {/* Button Suction State */}
-        <Flex
-          alignItems={'center'}
-          justifyContent={suction === Suction.Left ? 'end' : 'start'}
-          userSelect={'none'}
-          className={styles.suctionState}
-          data-suction={suction}
-          onClick={() => {
-            onClose();
-            setSuction(Suction.None);
-          }}
-          onMouseEnter={() => {
-            if (!lockSuction) {
+                </Box>
+              );
+            })}
+          </Box>
+          {/* Button Suction State */}
+          <Flex
+            alignItems={'center'}
+            justifyContent={suction === Suction.Left ? 'end' : 'start'}
+            userSelect={'none'}
+            className={styles.suctionState}
+            data-suction={suction}
+            onClick={() => {
+              onClose();
               setSuction(Suction.None);
-            }
-          }}
-        >
-          <Iconfont
-            iconName={suction === Suction.Left ? 'icon-more-left' : 'icon-more-right'}
-            color="#FFFFFF"
-            width={24}
-            height={24}
-          />
-        </Flex>
-      </div>
-    </Draggable>
+            }}
+            onMouseEnter={() => {
+              if (!lockSuction) {
+                setSuction(Suction.None);
+              }
+            }}
+          >
+            <Iconfont
+              iconName={suction === Suction.Left ? 'icon-more-left' : 'icon-more-right'}
+              color="#FFFFFF"
+              width={24}
+              height={24}
+            />
+          </Flex>
+        </div>
+      </Draggable>
+      {dragging && (
+        <Box position={'absolute'} top={0} left={0} w="100%" h="100%" zIndex={8888}></Box>
+      )}
+    </>
   );
 }

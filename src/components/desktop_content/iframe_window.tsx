@@ -7,17 +7,14 @@ export default function Iframe_window({ pid }: { pid: Pid }) {
   const findAppInfo = useAppStore((state) => state.findAppInfo);
   const app = findAppInfo(pid);
   const url = useMemo(() => app?.data?.url || '', [app?.data?.url]);
+  if (!url) return;
 
   return (
-    <div className={styles.iframeContainer}>
-      {!!url && (
-        <iframe
-          className={styles.iframeContainer}
-          src={url}
-          allow="camera;microphone;clipboard-write;"
-          id={`app-window-${app?.key}`}
-        />
-      )}
-    </div>
+    <iframe
+      className={styles.iframeContainer}
+      src={url}
+      allow="camera;microphone;clipboard-write;"
+      id={`app-window-${app?.key}`}
+    />
   );
 }

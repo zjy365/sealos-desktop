@@ -85,6 +85,7 @@ export default function AppWindow(props: {
       >
         {/* app window header */}
         <Flex
+          cursor={'pointer'}
           h="28px"
           background={'#F7F8FA'}
           className={'windowHeader'}
@@ -124,8 +125,6 @@ export default function AppWindow(props: {
             <Box
               className={styles.uicon}
               onClick={(e) => {
-                console.log(wnapp, 'update');
-
                 e.stopPropagation();
                 e.preventDefault();
                 updateOpenedAppInfo({
@@ -159,12 +158,15 @@ export default function AppWindow(props: {
           </Flex>
         </Flex>
         {/* app window content */}
-        <Flex flexGrow={1} overflow={'hidden'} borderRadius={'0 0 6px 6px'}>
+        <Flex
+          flexGrow={1}
+          overflow={'hidden'}
+          borderRadius={'0 0 6px 6px'}
+          className={dragging ? styles.dragMask : ''}
+        >
           <div
             className={styles.appMask}
             onClick={() => {
-              console.log('mask');
-
               setToHighestLayer(pid);
             }}
             style={{ pointerEvents: wnapp.zIndex !== maxZIndex ? 'unset' : 'none' }}
