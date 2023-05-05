@@ -11,7 +11,8 @@ export default function Index() {
   const [showNotification, setShowNotification] = useState(false);
   const [notificationAmount, setNotificationAmount] = useState(0);
   const accountDisclosure = useDisclosure();
-  const { user } = useSessionStore((state) => state.getSession());
+  const userInfo = useSessionStore((state) => state.getSession());
+  if (!userInfo) return;
 
   return (
     <Flex
@@ -35,12 +36,12 @@ export default function Index() {
         <Box
           onClick={accountDisclosure.isOpen ? accountDisclosure.onClose : accountDisclosure.onOpen}
         >
-          {user?.avatar ? (
+          {userInfo?.user?.avatar ? (
             <img
               width={32}
               height={32}
               style={{ borderRadius: '50%' }}
-              src={user.avatar}
+              src={userInfo?.user.avatar}
               alt="user avator"
             />
           ) : (
