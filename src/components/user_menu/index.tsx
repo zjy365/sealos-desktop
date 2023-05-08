@@ -7,12 +7,12 @@ import Account from '@/components/account';
 import { useDisclosure } from '@chakra-ui/react';
 import useSessionStore from '@/stores/session';
 
-export default function Index() {
+export default function Index(props: any) {
   const [showNotification, setShowNotification] = useState(false);
   const [notificationAmount, setNotificationAmount] = useState(0);
   const accountDisclosure = useDisclosure();
   const userInfo = useSessionStore((state) => state.getSession());
-  if (!userInfo) return;
+  if (!userInfo) return null;
 
   return (
     <Flex

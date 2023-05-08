@@ -7,7 +7,7 @@ export default function Iframe_window({ pid }: { pid: Pid }) {
   const findAppInfo = useAppStore((state) => state.findAppInfo);
   const app = findAppInfo(pid);
   const url = useMemo(() => app?.data?.url || '', [app?.data?.url]);
-  if (!url) return;
+  if (!url) return null;
 
   return (
     <iframe
