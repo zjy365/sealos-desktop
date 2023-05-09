@@ -19,7 +19,7 @@ const UserMenu = dynamic(() => import('@/components/user_menu'), {
 });
 
 export default function DesktopContent(props: any) {
-  const { installedApps: apps, runningInfo, openApp, setToHighestLayer } = useAppStore();
+  const { installedApps: apps, runningInfo, openApp, setToHighestLayerById } = useAppStore();
   const isBrowser = typeof window !== 'undefined';
   // set DesktopHeight from globalconfig
   const { setDesktopHeight } = useDesktopGlobalConfig();
@@ -32,7 +32,7 @@ export default function DesktopContent(props: any) {
   const handleDoubleClick = (e: MouseEvent<HTMLDivElement>, item: TApp) => {
     e.preventDefault();
     if (item?.name) {
-      openApp(item);
+      openApp(item, {});
     }
   };
 
@@ -54,14 +54,14 @@ export default function DesktopContent(props: any) {
       if (!app) return;
       openApp(app, query);
       if (runningApp) {
-        setToHighestLayer(runningApp.pid);
+        setToHighestLayerById(runningApp.pid);
       }
       // post message
       const iframe = document.getElementById(`app-window-${appKey}`) as HTMLIFrameElement;
       if (!iframe) return;
       iframe.contentWindow?.postMessage(messageData, app.data.url);
     },
-    [apps, openApp, runningInfo, setToHighestLayer]
+    [apps, openApp, runningInfo, setToHighestLayerById]
   );
 
   useEffect(() => {
