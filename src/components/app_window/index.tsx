@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
 import useAppStore from '@/stores/app';
-import { Pid, TApp } from '@/types';
 import { Box, Flex } from '@chakra-ui/react';
 import clsx from 'clsx';
 import React, { useRef, useState } from 'react';
@@ -11,22 +10,22 @@ import useDesktopGlobalConfig from '@/stores/desktop';
 
 export default function AppWindow(props: {
   style?: React.CSSProperties;
-  pid: Pid;
+  pid:number;
   children: any;
   // desktopHeight: number;
 }) {
   const { pid } = props;
   const desktopHeight = useDesktopGlobalConfig((state) => state.desktopHeight);
   const {
-    closeApp,
+    closeAppById,
     updateOpenedAppInfo,
-    setToHighestLayer,
+    setToHighestLayerById,
     currentApp,
     currentAppPid,
-    findAppInfo,
+    findAppInfoById,
     maxZIndex
   } = useAppStore();
-  const wnapp = findAppInfo(pid)!;
+  const wnapp = findAppInfoById(pid)!;
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const dragDom = useRef<HTMLDivElement>(null);
   const [dragging, setDragging] = useState(false);
@@ -150,7 +149,7 @@ export default function AppWindow(props: {
                   ...wnapp,
                   isShow: false
                 });
-                closeApp(currentAppPid);
+                closeAppById(currentAppPid);
               }}
             >
               <img src={'/icons/close.png'} width={12} />
@@ -161,7 +160,7 @@ export default function AppWindow(props: {
         <div
           className={styles.appMask}
           onClick={() => {
-            setToHighestLayer(pid);
+            setToHighestLayerById(pid);
           }}
           style={{ pointerEvents: wnapp.zIndex !== maxZIndex ? 'unset' : 'none' }}
         ></div>
